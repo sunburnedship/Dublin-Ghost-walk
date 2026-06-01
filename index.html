@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Shadows of Dublin — Ghost Walk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#0a0a0f;min-height:100vh;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Source Serif 4',Palatino,serif;color:#e8e4d9}
+  input,button{font-family:inherit}
+  button:active{transform:scale(0.98)}
+  #loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#c9a84c;font-family:'Playfair Display',serif;font-size:18px;font-style:italic}
+</style>
+</head>
+<body>
+<div id="loading">Summoning the spirits…</div>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel" data-presets="env,react">
+var useState = React.useState;
+var useEffect = React.useEffect;
+var useCallback = React.useCallback;
+var useRef = React.useRef;
+
+// ====== CONFIG ======
+var EL_API_KEY = "sk_30c7172559a81951acfc69e805d6b02dec11243a80ac4806";
+var EL_VOICE_ID = "onwK4e9ZLuTAKqWW03F9"; // Daniel
+var EL_ENDPOINT = "https://api.elevenlabs.io/v1/text-to-speech/" + EL_VOICE_ID;
+
+var C = {
+  bg: "#0a0a0f", card: "#13131d", border: "#2a2a3a",
+  gold: "#c9a84c", goldDim: "#8a7233", goldBg: "rgba(201,168,76,0.15)",
+  text: "#e8e4d9", muted: "#8a8677",
+  danger: "#e05555", dangerBg: "rgba(224,85,85,0.12)",
+  success: "#4cc96a",
+  warn: "#c9944c", warnBg: "rgba(201,148,76,0.12)",
+  purple: "#b090e0", purpleBg: "rgba(100,60,180,0.12)"
+};
+var Fd = "'Playfair Display',Georgia,serif";
+var Fb = "'Source Serif 4',Palatino,serif";
+var Fm = "'JetBrains Mono',monospace";
+
+var LOCS = {
+  start: {
+    name: "St. Stephen's Green", emoji: "🌿", lat: 53.33815, lng: -6.25914,
+    clue: "One of Dublin's most cherished public spaces has been open to the public since 1664 — though its history is far from serene. Originally used for public hangings and floggings, it was redesigned in 1880 by a member of Dublin's most famous brewing dynasty. During the 1916 Easter Rising, rebel forces dug trenches here and exchanged fire with British soldiers on the rooftops of a grand hotel overlooking the grounds. Bullet holes can still be found in the surrounding buildings.",
+    ghost: "On foggy evenings, visitors have reported hearing the phantom crack of a hangman's rope near the northwest corner — where public executions took place for over a century. The most persistent sighting is of a woman in grey who walks the perimeter path after midnight, believed to be the shade of a young woman executed in 1798 for aiding rebel forces. Groundskeepers have reported finding flower beds near the Wolfe Tone memorial disturbed in the mornings, with no footprints leading in or out.",
+    answers: ["st stephens green","stephens green","stephen green","st stephen green","st stephens"],
+    hint1: "This beautiful 9-hectare park sits right in the heart of Dublin city centre, accessible from the top of one of Dublin's most famous pedestrian shopping streets.",
+    hint2: "It sits at the top of Grafton Street. During the 1916 Rising, Countess Constance Markievicz commanded rebel forces inside its iron gates."
+  },
+  loc_a: {
+    name: "St. Ann's Church", subtitle: "Dawson Street", emoji: "⛪", lat: 53.34095, lng: -6.25730,
+    clue: "Built in 1720 on one of Dublin's most elegant Georgian streets, this parish church has been a centre of city life for three centuries. It maintains a remarkable tradition: a bread shelf endowed in 1723 still provides food to the poor of the parish to this day. In September 1878, the author of the world's most famous vampire novel walked through its doors — not to research his work, but to get married.",
+    ghost: "It was in this very church that Bram Stoker married Florence Balcombe in 1878 — the same woman Oscar Wilde had once courted. Some say Wilde's jealous spirit has never forgiven the slight. Late-night passersby have heard the faint strains of organ music drifting from the locked church, though no organist is present. A verger in the 1960s reported seeing a tall figure in a velvet coat standing in the gallery, watching the empty pews below with profound sadness.",
+    answers: ["st anns","st ann","st ann's church","ann's church","dawson street church","anns church","st anns church"],
+    hint1: "This church sits on Dawson Street, the street running parallel to and east of Grafton Street, between St. Stephen's Green and Trinity College.",
+    hint2: "It's where Bram Stoker was married. Look for the striking Romanesque façade added in 1868 — one of the street's most recognisable buildings."
+  },
+  loc_b: {
+    name: "Powerscourt Townhouse", subtitle: "South William Street", emoji: "🏛️", lat: 53.34190, lng: -6.26240,
+    clue: "This magnificent Georgian townhouse was built in 1774 for a Viscount whose family seat is one of Ireland's most famous estates in the Wicklow Mountains. Designed by Robert Mack, its elaborate plasterwork and grand mahogany staircase once hosted lavish aristocratic balls. Converted into a shopping centre in 1981, the building retains its extraordinary Georgian grandeur — tucked away on a street running parallel to Grafton Street.",
+    ghost: "The ghost of a serving girl has been seen on the grand staircase, always climbing, never arriving. She was a maid who fell to her death from the upper gallery during a ball in the 1790s — some whisper she was pushed by a jealous rival. Shopkeepers on the upper floors report items rearranging themselves overnight and the sound of rustling fabric in empty corridors. One night watchman refused to return after hearing a woman's voice whispering help me from the empty stairwell at 3 in the morning.",
+    answers: ["powerscourt","powerscourt townhouse","powerscourt centre","powerscourt center","powerscourt shopping"],
+    hint1: "This 18th-century townhouse is now a shopping centre on South William Street, between Grafton Street and South Great George's Street.",
+    hint2: "The family name is associated with a famous waterfall and estate in County Wicklow."
+  },
+  loc_c: {
+    name: "Dublin Castle", subtitle: "Dame Street", emoji: "🏰", lat: 53.34320, lng: -6.26740,
+    clue: "For over 700 years, this fortress complex stood as the seat of British rule in Ireland. Built by the Anglo-Normans in the early 1200s, it houses State Apartments, a Gothic chapel, and a medieval undercroft constructed directly on top of Viking foundations. It was here in January 1922 that one of Ireland's most iconic revolutionary figures formally accepted the handover of power from the British.",
+    ghost: "The Lady in Red is this location's most famous phantom — believed to be a noblewoman imprisoned and executed here during the 16th century. Her spectral figure, draped in crimson, drifts through the State Apartments after dark. Guards have reported phantom footsteps in empty corridors and doors slamming on windless nights. In the medieval Undercroft, where Viking Dublin lies buried beneath your feet, one archaeological team photographed a shadowy figure standing in a doorway where no person stood.",
+    answers: ["dublin castle","the castle","castle"],
+    hint1: "This medieval fortress sits on Dame Street, directly adjacent to City Hall. It was the headquarters of British administration in Ireland for nearly 700 years.",
+    hint2: "There's a large cobbled courtyard, a round tower from the 1200s, and guided tours available daily. It's simply named after the city it sits in."
+  },
+  loc_d: {
+    name: "City Hall", subtitle: "Dame Street", emoji: "🏛️", lat: 53.34395, lng: -6.26690,
+    clue: "Originally built as a commercial trading exchange in 1779, this magnificent domed building on Dame Street features twelve imposing columns and a stunning mosaic floor depicting Dublin's coat of arms. During the 1916 Easter Rising, rebel forces occupied the building. The first insurgent to die in the entire rebellion was shot by a sniper while defiantly raising a flag on its roof.",
+    ghost: "In 1916, fierce fighting raged inside these walls, and a young actor named Sean Connolly became the first rebel to fall. His ghost, in rebel uniform, has been reported pacing the rotunda late at night. Cleaning staff describe hearing echoes of gunfire that abruptly stop, followed by eerie silence. One security guard reported that every night at precisely five past midnight, the temperature in the rotunda drops sharply.",
+    answers: ["city hall","dublin city hall","royal exchange"],
+    hint1: "This domed building sits directly across from Dublin Castle, at the top of Dame Street where it meets Lord Edward Street.",
+    hint2: "It has served as Dublin's civic administration centre since 1852. The circular rotunda beneath its dome is one of the most impressive free-to-enter interiors in the city."
+  },
+  loc_e: {
+    name: "Temple Bar", subtitle: "Crown Alley", emoji: "🍺", lat: 53.34540, lng: -6.26420,
+    clue: "This cobblestoned cultural quarter's name has nothing to do with drinking establishments — it was named after Sir William Temple, a 17th-century landowner and Provost of Trinity College. The word Bar referred to a riverside walkway. Nearly demolished to make way for a bus terminal in the 1980s, it was saved by an arts campaign and is now Dublin's cultural quarter.",
+    ghost: "Beneath the cobblestones lie the bones of medieval Dublin. The most chilling tale belongs to Darkey Kelly, a woman in nearby Copper Alley during the 1700s who accused a powerful city official of wrongdoing — in revenge, he had her convicted of witchcraft and burned at the stake. Even today, people in these narrow lanes have reported smelling burning on perfectly clear evenings, and a dark-haired woman has been seen standing in doorways before dissolving into shadow.",
+    answers: ["temple bar","temple bar dublin"],
+    hint1: "It's Dublin's most famous cultural quarter — a cobblestoned area south of the River Liffey, bounded by Dame Street to the south, known worldwide for its nightlife.",
+    hint2: "Bordered by Dame Street to the south and the River Liffey to the north, its main street gives its name to a well-known bank."
+  },
+  loc_f: {
+    name: "Olympia Theatre", subtitle: "Dame Street", emoji: "🎭", lat: 53.34440, lng: -6.26530,
+    clue: "Originally called Dan Lowrey's Star of Erin Music Hall when it opened in 1879, this performance venue is one of Dublin's oldest and most beloved theatres. Its ornate Victorian interior has hosted Charlie Chaplin, Laurel and Hardy, David Bowie, and Radiohead. The founder died backstage in 1897 — and according to theatre legend, his devotion to his creation was so absolute that he never truly departed.",
+    ghost: "Backstage, performers speak in hushed tones about the man in the balcony — a gaunt figure in Victorian dress who appears during rehearsals, watching the stage intently, fading when approached. Some believe he is the ghost of the theatre's original owner, who died backstage and refuses to leave. On one occasion, a night security guard heard the distinct sound of a single person applauding from a completely empty auditorium.",
+    answers: ["olympia","olympia theatre","olympia theater","the olympia"],
+    hint1: "This Victorian theatre is on Dame Street — look for the distinctive iron-and-glass canopy extending over the pavement.",
+    hint2: "It's named after Mount Olympus, home of the Greek gods. Its facade is blue and gold. You'll find it on Dame Street between Dublin Castle and the Central Bank."
+  },
+  loc_g: {
+    name: "George's Street Arcade", subtitle: "South Great George's Street", emoji: "🏪", lat: 53.34250, lng: -6.26380,
+    clue: "Opened in 1881, this is Dublin's oldest surviving indoor shopping arcade — a stunning Victorian structure of red brick and terracotta with a glass-vaulted roof. Gutted by fire in 1892, it was rebuilt even grander than before. Today its eclectic stalls include vintage clothing, record shops, jewellers, and fortune tellers. During construction in 1881, workers uncovered dozens of unmarked graves beneath the foundations.",
+    ghost: "The arcade was built on an old burial ground, and after the fire of 1892, people reported seeing figures moving in the smoke-blackened ruins. Today, stallholders who arrive early report hearing footsteps on the upper gallery when no one else has arrived. A woman in a long dark dress has been spotted browsing the stalls just before closing — only to vanish when approached. The fortune tellers who work here refuse to do readings after dark.",
+    answers: ["georges street arcade","george street arcade","georges arcade","south great georges street arcade","georges st arcade","george's street arcade"],
+    hint1: "This Victorian-era indoor market sits on South Great George's Street, which runs parallel to and west of Grafton Street.",
+    hint2: "It's a red-brick arcade with a glass roof — vintage shops, record stalls, and a famous fortune teller inside."
+  },
+  loc_h: {
+    name: "Molly Malone Statue", subtitle: "Suffolk Street", emoji: "🐚", lat: 53.34361, lng: -6.26100,
+    clue: "She wheeled her barrow through streets broad and narrow, crying cockles and mussels, alive alive oh! Whether she was a real person remains debated, though parish records from 1699 mention a Mary Malone who died young of a fever and was buried nearby. A bronze memorial to this iconic figure was unveiled in 1988 for Dublin's millennium celebration. Nicknamed the Tart with the Cart by Dubliners with characteristic affection.",
+    ghost: "Late at night, around the old market district, people have heard the unmistakable creak of wooden cart wheels on cobblestones. A young woman in 17th-century dress has been reported pushing a barrow through the mist near Suffolk Street, only to dissolve when the fog lifts. Taxi drivers have reportedly picked up a young woman near the statue in the early hours — she asks to be taken to a churchyard, but when they arrive, the back seat is empty.",
+    answers: ["molly malone","molly malone statue","tart with the cart","suffolk street statue","molly"],
+    hint1: "This famous bronze statue stands at the foot of Grafton Street, near the junction with Nassau Street and Suffolk Street.",
+    hint2: "She's one of Dublin's most photographed landmarks — a fishmonger with a cart overflowing with shellfish. She stands on Suffolk Street."
+  },
+  loc_i: {
+    name: "Bank of Ireland", subtitle: "College Green", emoji: "🏦", lat: 53.34430, lng: -6.25940,
+    clue: "The imposing building at College Green was originally the world's first purpose-built bicameral parliament, constructed between 1729 and 1739. After the Act of Union in 1800 abolished the Irish Parliament, the building was sold and has been occupied by a financial institution ever since. The original House of Lords chamber survives intact with 18th-century tapestries, a sparkling Irish crystal chandelier, and a silver-gilt mace.",
+    ghost: "In the old House of Lords chamber, employees working late have reported the sound of heated debate echoing from the empty room — ghostly parliamentarians arguing points of law long after their institution was abolished. The most famous apparition is Henry Grattan, the great orator who fought passionately against the Act of Union. His ghost, in full parliamentary dress, has been seen standing at the entrance on College Green.",
+    answers: ["bank of ireland","college green","bank of ireland college green"],
+    hint1: "This building stands at College Green, directly opposite the main entrance gates to Trinity College Dublin.",
+    hint2: "It was originally a parliament building. It's now one of Ireland's oldest and largest banks."
+  },
+  loc_j: {
+    name: "Christ Church Cathedral", subtitle: "Christchurch Place", emoji: "⛪", lat: 53.34340, lng: -6.27130,
+    clue: "Founded around 1030 by the Norse King Sitric Silkenbeard, this is Dublin's oldest medieval building, predating even the Norman conquest of the city. It was rebuilt in stone by the Norman knight Strongbow in the 1170s after he seized Dublin. Its famous crypt — the largest in Ireland — stretches the entire length of the building. The Norman conqueror himself lies buried in the nave.",
+    ghost: "The crypt has been a place of dread for nearly a millennium. The most persistent ghost is Strongbow himself — his armored shade has been seen kneeling at his tomb in the dead of night. The cathedral's most disturbing haunting involves a mummified cat and rat found trapped together inside an organ pipe, still on display in a glass case. Visitors report hearing unearthly yowling from the crypt, and on certain nights, a scratching sound issues from behind the stone walls.",
+    answers: ["christ church","christ church cathedral","christchurch","christchurch cathedral","christ church dublin"],
+    hint1: "This medieval cathedral stands on a hill at Christchurch Place, connected by a covered stone bridge to the Dublinia museum next door.",
+    hint2: "Founded by a Viking king. You can hear its bells from some distance away."
+  },
+  end: {
+    name: "Trinity College Dublin", emoji: "📚", lat: 53.34384, lng: -6.25460,
+    clue: "Founded in 1592 by Queen Elizabeth I, this is Ireland's oldest university. Its famous Long Room library holds over 200,000 ancient books, including a masterwork of medieval illuminated art created by Celtic monks around 800 AD. Among its distinguished alumni: the author of The Importance of Being Earnest, the author of Waiting for Godot, and the young man who walked these very cobblestones before going on to write the world's most famous vampire novel.",
+    ghost: "Bram Stoker walked these cobblestones before penning the most famous horror novel ever written. The ghost of Edward Ford, a lecturer who died in the 1700s, is said to haunt the oldest buildings wearing a powdered wig and academic gown. In the Long Room, night security guards have heard the unmistakable sound of pages turning when no one else is present — as if some scholarly spirit cannot rest until it finishes its reading.",
+    answers: ["trinity college","trinity","tcd","trinity college dublin","trinity college, dublin"],
+    hint1: "This world-famous university occupies a large walled campus right in the heart of Dublin city, with its iconic main entrance on College Green.",
+    hint2: "Ireland's oldest university, home to the Book of Kells. Its initials are T-C-D."
+  }
+};
+
+var ROUTES = {
+  1: ["loc_a","loc_b","loc_c","loc_e","loc_h"],
+  2: ["loc_h","loc_g","loc_f","loc_d","loc_i"],
+  3: ["loc_b","loc_g","loc_c","loc_d","loc_a"],
+  4: ["loc_a","loc_f","loc_e","loc_j","loc_i"],
+  5: ["loc_g","loc_c","loc_j","loc_e","loc_h"],
+  6: ["loc_h","loc_b","loc_d","loc_f","loc_i"]
+};
+
+function haversine(lat1, lon1, lat2, lon2) {
+  var R = 6371000;
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLon = (lon2 - lon1) * Math.PI / 180;
+  var sa = Math.sin(dLat / 2);
+  var sb = Math.sin(dLon / 2);
+  var a = sa * sa + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * sb * sb;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+function norm(s) {
+  return s.toLowerCase().replace(/['`]/g, "").replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+}
+function checkAnswer(input, id) {
+  if (!input || input.trim().length < 2) return false;
+  var n = norm(input);
+  return LOCS[id].answers.some(function(a) {
+    var na = norm(a);
+    return n === na || n.indexOf(na) !== -1 || (na.indexOf(n) !== -1 && n.length >= 5);
+  });
+}
+function fmt(sec) {
+  var h = Math.floor(sec / 3600);
+  var m = Math.floor((sec % 3600) / 60);
+  var s = sec % 60;
+  function pad(x) { return x < 10 ? "0" + x : "" + x; }
+  return h > 0 ? h + ":" + pad(m) + ":" + pad(s) : m + ":" + pad(s);
+}
+
+var bb = { fontFamily: Fd, fontWeight: 700, cursor: "pointer", transition: "all 0.15s", boxSizing: "border-box", display: "block", width: "100%", borderRadius: 8, padding: "13px 20px", fontSize: 15, letterSpacing: 0.5 };
+var Btn = {
+  gold: Object.assign({}, bb, { color: C.gold, background: "transparent", border: "2px solid " + C.gold }),
+  muted: Object.assign({}, bb, { color: C.muted, background: "transparent", border: "1px solid " + C.border, fontFamily: Fb, fontSize: 14, fontWeight: 400 }),
+  warn: Object.assign({}, bb, { color: C.warn, background: C.warnBg, border: "1px solid " + C.warn + "55", fontFamily: Fb, fontSize: 14, fontWeight: 400 }),
+  team: { fontFamily: Fm, fontSize: 18, fontWeight: 700, color: C.muted, background: C.card, border: "1px solid " + C.border, borderRadius: 8, padding: "14px 0", cursor: "pointer", transition: "all .15s" },
+  teamOn: { fontFamily: Fm, fontSize: 18, fontWeight: 700, color: C.gold, background: C.goldBg, border: "1px solid " + C.gold, borderRadius: 8, padding: "14px 0", cursor: "pointer" },
+  back: { background: "none", border: "none", color: C.gold, fontFamily: Fb, fontSize: 15, cursor: "pointer", padding: "4px 0 12px", display: "block" }
+};
+var inpStyle = { fontFamily: Fb, fontSize: 15, color: C.text, background: C.card, border: "1px solid " + C.border, borderRadius: 8, padding: "12px 16px", outline: "none", width: "100%", boxSizing: "border-box" };
+var cardStyle = { background: C.card, border: "1px solid " + C.border, borderRadius: 12, padding: 20 };
+var lbl = { display: "block", fontFamily: Fd, fontSize: 13, fontWeight: 600, color: C.text, marginBottom: 8, letterSpacing: 0.5 };
+var tagStyle = { fontFamily: Fm, fontSize: 10, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10, display: "block" };
+
+function ListenBtn(props) {
+  var speaking = props.speaking;
+  var loading = props.loading;
+  var busy = speaking || loading;
+  var btnStyle = {
+    fontFamily: Fm, fontSize: 11, cursor: loading ? "wait" : "pointer", letterSpacing: 0.5,
+    borderRadius: 20, padding: "5px 14px", transition: "all .15s", whiteSpace: "nowrap",
+    border: speaking ? "1px solid " + C.danger + "55" : loading ? "1px solid " + C.muted + "44" : "1px solid " + C.gold + "55",
+    background: speaking ? C.dangerBg : loading ? "rgba(255,255,255,0.04)" : C.goldBg,
+    color: speaking ? C.danger : loading ? C.muted : C.gold
+  };
+  return (
+    <button style={btnStyle} onClick={function() { return busy ? props.onStop() : props.onSpeak(props.text); }}>
+      {loading ? "⏳ Generating…" : speaking ? "⏹ Stop" : "🔊 Listen"}
+    </button>
+  );
+}
+
+function App() {
+  var _s = useState("splash"); var screen = _s[0]; var setScreen = _s[1];
+  var _t = useState(null); var teamNum = _t[0]; var setTeamNum = _t[1];
+  var _tn = useState(""); var teamName = _tn[0]; var setTeamName = _tn[1];
+
+  var _si = useState(0); var stopIdx = _si[0]; var setStopIdx = _si[1];
+  var _p = useState("clue"); var phase = _p[0]; var setPhase = _p[1];
+  var _hl = useState(0); var hintLevel = _hl[0]; var setHintLevel = _hl[1];
+  var _g = useState(""); var guess = _g[0]; var setGuess = _g[1];
+  var _fb = useState(null); var feedback = _fb[0]; var setFeedback = _fb[1];
+
+  var _gs = useState("idle"); var gpsStatus = _gs[0]; var setGpsStatus = _gs[1];
+  var _gm = useState(""); var gpsMsg = _gm[0]; var setGpsMsg = _gm[1];
+  var _so = useState(false); var showOverride = _so[0]; var setShowOverride = _so[1];
+  var _dm = useState(null); var distM = _dm[0]; var setDistM = _dm[1];
+
+  var _sm = useState(null); var startMs = _sm[0]; var setStartMs = _sm[1];
+  var _ps = useState(0); var penaltySec = _ps[0]; var setPenaltySec = _ps[1];
+  var _em = useState(0); var elapsedMs = _em[0]; var setElapsedMs = _em[1];
+  var _fs = useState(null); var finalSec = _fs[0]; var setFinalSec = _fs[1];
+
+  var _sp = useState(false); var speaking = _sp[0]; var setSpeaking = _sp[1];
+  var _tl = useState(false); var ttsLoading = _tl[0]; var setTtsLoading = _tl[1];
+  var _te = useState(""); var ttsError = _te[0]; var setTtsError = _te[1];
+  var audioRef = useRef(null);
+  var audioCacheRef = useRef({});
+
+  useEffect(function() {
+    if (!startMs || finalSec !== null) return;
+    var iv = setInterval(function() { setElapsedMs(Date.now() - startMs); }, 500);
+    return function() { clearInterval(iv); };
+  }, [startMs, finalSec]);
+
+  var totalSec = finalSec !== null ? finalSec : Math.floor(elapsedMs / 1000) + penaltySec;
+
+  var stopAll = useCallback(function() {
+    if (audioRef.current) {
+      try { audioRef.current.pause(); } catch (e) {}
+      if (audioRef.current.remove) audioRef.current.remove();
+      audioRef.current = null;
+    }
+    setSpeaking(false);
+    setTtsLoading(false);
+    setTtsError("");
+  }, []);
+
+  var fetchAudio = useCallback(function(text) {
+    if (audioCacheRef.current[text]) return Promise.resolve(audioCacheRef.current[text]);
+    return fetch(EL_ENDPOINT, {
+      method: "POST",
+      headers: { Accept: "audio/mpeg", "Content-Type": "application/json", "xi-api-key": EL_API_KEY },
+      body: JSON.stringify({
+        text: text,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: { stability: 0.5, similarity_boost: 0.8, style: 0.3, use_speaker_boost: true }
+      })
+    }).then(function(res) {
+      if (!res.ok) {
+        return res.text().then(function(t) {
+          throw new Error("API " + res.status + ": " + t.slice(0, 150));
+        });
+      }
+      return res.blob();
+    }).then(function(blob) {
+      var url = URL.createObjectURL(blob);
+      audioCacheRef.current[text] = url;
+      return url;
+    });
+  }, []);
+
+  var playCached = useCallback(function(url) {
+    var audio = new Audio(url);
+    audio.preload = "auto";
+    audio.playsInline = true;
+    document.body.appendChild(audio);
+    audioRef.current = audio;
+    audio.onended = function() { setSpeaking(false); audio.remove(); audioRef.current = null; };
+    audio.onerror = function() {
+      var c = audio.error ? audio.error.code : "?";
+      setTtsError("Playback error (code " + c + ")");
+      setSpeaking(false);
+      audio.remove();
+      audioRef.current = null;
+    };
+    var p = audio.play();
+    if (p && p.then) {
+      p.then(function() { setSpeaking(true); }).catch(function(e) {
+        setTtsError("Play blocked: " + e.message);
+        audio.remove();
+      });
+    } else {
+      setSpeaking(true);
+    }
+  }, []);
+
+  var speak = useCallback(function(text) {
+    stopAll();
+    setTtsError("");
+    if (audioCacheRef.current[text]) {
+      playCached(audioCacheRef.current[text]);
+      return;
+    }
+    setTtsLoading(true);
+    fetchAudio(text).then(function(url) {
+      setTtsLoading(false);
+      playCached(url);
+    }).catch(function(e) {
+      setTtsLoading(false);
+      setTtsError("Voice fetch failed: " + (e.message || "unknown"));
+    });
+  }, [stopAll, fetchAudio, playCached]);
+
+  useEffect(function() { stopAll(); }, [stopIdx, phase, screen, stopAll]);
+
+  useEffect(function() {
+    if (!teamNum) return;
+    var r = ["start"].concat(ROUTES[teamNum]).concat(["end"]);
+    var cur = LOCS[r[stopIdx]];
+    if (!cur || (phase !== "clue" && phase !== "ghost")) return;
+    var txt = phase === "clue" ? cur.clue : cur.ghost;
+    if (audioCacheRef.current[txt]) return;
+    fetchAudio(txt).catch(function(err) { console.warn("Prefetch failed:", err.message); });
+  }, [teamNum, stopIdx, phase, fetchAudio]);
+
+  var route = teamNum ? ["start"].concat(ROUTES[teamNum]).concat(["end"]) : [];
+  var locId = route[stopIdx] || null;
+  var loc = locId ? LOCS[locId] : null;
+  var isLast = stopIdx === route.length - 1;
+  function addPenalty(s) { setPenaltySec(function(p) { return p + s; }); }
+
+  function beginHunt() {
+    setStopIdx(0); setPhase("clue"); setHintLevel(0); setGuess(""); setFeedback(null);
+    setGpsStatus("idle"); setGpsMsg(""); setShowOverride(false); setDistM(null);
+    setStartMs(Date.now()); setPenaltySec(0); setElapsedMs(0); setFinalSec(null);
+    audioCacheRef.current = {};
+    setScreen("hunt");
+  }
+
+  function submitGuess() {
+    if (!guess.trim()) return;
+    if (checkAnswer(guess, locId)) {
+      setPhase("traveling"); setFeedback({ type: "correct" });
+    } else {
+      if (hintLevel === 0) { addPenalty(120); setHintLevel(1); setFeedback({ type: "wrong", penalty: 120, msg: "Not quite! Here's your first hint." }); }
+      else if (hintLevel === 1) { addPenalty(120); setHintLevel(2); setFeedback({ type: "wrong", penalty: 120, msg: "Still not right! One final hint." }); }
+      else { addPenalty(600); setHintLevel(3); setFeedback({ type: "revealed" }); setTimeout(function() { setPhase("traveling"); }, 2000); }
+      setGuess("");
+    }
+  }
+
+  function handleCheckIn() {
+    setGpsStatus("checking"); setGpsMsg(""); setShowOverride(false); setDistM(null);
+    if (!navigator.geolocation) { setGpsStatus("fail"); setGpsMsg("GPS not available on this device."); setShowOverride(true); return; }
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        var d = haversine(pos.coords.latitude, pos.coords.longitude, loc.lat, loc.lng);
+        setDistM(Math.round(d));
+        if (d <= 50) { confirmArrival(); }
+        else { setGpsStatus("fail"); setGpsMsg("You're about " + Math.round(d) + "m away — get a bit closer and try again!"); setShowOverride(true); }
+      },
+      function(err) {
+        setGpsStatus("fail");
+        setGpsMsg(err.code === 1 ? "Location access denied. Enable GPS or use manual check-in." : "Couldn't get your location. Try again or check in manually.");
+        setShowOverride(true);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+  }
+
+  function confirmArrival() {
+    setGpsStatus("ok");
+    setTimeout(function() { setPhase("ghost"); setGpsStatus("idle"); }, 700);
+  }
+
+  function nextStop() {
+    if (stopIdx + 1 >= route.length) { setFinalSec(Math.floor(elapsedMs / 1000) + penaltySec); setScreen("complete"); return; }
+    setStopIdx(function(i) { return i + 1; });
+    setPhase("clue"); setHintLevel(0); setGuess(""); setFeedback(null);
+    setGpsStatus("idle"); setGpsMsg(""); setShowOverride(false); setDistM(null);
+  }
+
+  if (screen === "splash") {
+    return (
+      <div style={{ minHeight: "100vh", background: "radial-gradient(ellipse at 50% 25%,#1a1a2a," + C.bg + " 65%)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div style={{ textAlign: "center", maxWidth: 380 }}>
+          <div style={{ fontSize: 64, marginBottom: 4, filter: "drop-shadow(0 0 24px rgba(201,168,76,.5))" }}>👻</div>
+          <h1 style={{ fontFamily: Fd, fontSize: 50, fontWeight: 900, color: C.gold, lineHeight: 1.05, margin: "0 0 6px", letterSpacing: -1 }}>
+            Shadows<br/><em style={{ fontWeight: 400, fontSize: 26, color: C.muted }}>of</em><br/>Dublin
+          </h1>
+          <div style={{ color: C.goldDim, fontSize: 13, letterSpacing: 12, margin: "14px 0" }}>☘ ☘ ☘</div>
+          <p style={{ fontFamily: Fd, fontSize: 16, fontStyle: "italic", color: C.text, margin: "6px 0 4px" }}>A Haunted Walking Scavenger Hunt</p>
+          <p style={{ fontFamily: Fm, fontSize: 11, color: C.muted, margin: "0 0 28px", letterSpacing: 0.5 }}>St. Stephen's Green → Trinity College</p>
+          <button style={Btn.gold} onClick={function() { setScreen("setup"); }}>Begin the Hunt</button>
+          <p style={{ fontSize: 12, color: C.muted, marginTop: 18, lineHeight: 1.7 }}>6 teams · 7 haunted stops<br/>Read clues · Guess destinations · Unlock ghost stories</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (screen === "setup") {
+    return (
+      <div style={{ minHeight: "100vh", background: C.bg, padding: "20px 20px 56px", maxWidth: 460, margin: "0 auto" }}>
+        <button style={Btn.back} onClick={function() { setScreen("splash"); }}>← Back</button>
+        <h2 style={{ fontFamily: Fd, fontSize: 26, fontWeight: 700, color: C.gold, margin: "0 0 8px" }}>Assemble Your Team</h2>
+        <p style={{ color: C.muted, fontSize: 14, lineHeight: 1.7, margin: "0 0 24px" }}>Choose your team number and give yourselves a name worthy of the spirits you're about to encounter.</p>
+        <label style={lbl}>Team Number</label>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 8, marginBottom: 20 }}>
+          {[1,2,3,4,5,6].map(function(n) {
+            return <button key={n} style={teamNum === n ? Btn.teamOn : Btn.team} onClick={function() { setTeamNum(n); }}>{n}</button>;
+          })}
+        </div>
+        <label style={lbl}>Team Name</label>
+        <input style={inpStyle} placeholder="e.g. The Banshee Chasers" value={teamName} onChange={function(e) { setTeamName(e.target.value); }} maxLength={30}/>
+        <button style={Object.assign({}, Btn.gold, { marginTop: 24, opacity: teamNum && teamName.trim() ? 1 : 0.4, pointerEvents: teamNum && teamName.trim() ? "auto" : "none" })} onClick={beginHunt}>
+          Start the Hunt 👻
+        </button>
+      </div>
+    );
+  }
+
+  if (screen === "complete") {
+    return (
+      <div style={{ minHeight: "100vh", background: "radial-gradient(ellipse at 50% 30%,#0e1f0e," + C.bg + " 65%)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div style={{ textAlign: "center", maxWidth: 380 }}>
+          <div style={{ fontSize: 68, marginBottom: 12 }}>🏆</div>
+          <h1 style={{ fontFamily: Fd, fontSize: 38, fontWeight: 700, color: C.gold, margin: "0 0 6px" }}>Hunt Complete!</h1>
+          <p style={{ fontFamily: Fd, fontSize: 18, fontStyle: "italic", color: C.text, margin: "0 0 4px" }}>{teamName}</p>
+          <div style={{ color: C.success, fontSize: 13, letterSpacing: 10, margin: "14px 0" }}>☘ ☘ ☘</div>
+          <div style={Object.assign({}, cardStyle, { margin: "0 0 16px" })}>
+            <p style={{ fontFamily: Fm, fontSize: 11, color: C.muted, margin: "0 0 4px", textTransform: "uppercase", letterSpacing: 1 }}>Final Time</p>
+            <p style={{ fontFamily: Fm, fontSize: 46, fontWeight: 700, color: C.text, margin: 0 }}>{fmt(finalSec !== null ? finalSec : totalSec)}</p>
+            {penaltySec > 0 && <p style={{ fontFamily: Fm, fontSize: 12, color: C.warn, margin: "6px 0 0" }}>includes {fmt(penaltySec)} in time penalties</p>}
+          </div>
+          <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.8 }}>You've walked the haunted streets of Dublin and lived to tell the tale.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!loc) return null;
+  var stopNum = stopIdx + 1;
+  var totalStops = route.length;
+
+  return (
+    <div style={{ minHeight: "100vh", background: C.bg, padding: "16px 16px 56px", maxWidth: 520, margin: "0 auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, paddingBottom: 14, borderBottom: "1px solid " + C.border }}>
+        <div>
+          <p style={{ fontFamily: Fd, fontSize: 16, fontWeight: 700, color: C.gold, margin: 0 }}>{teamName}</p>
+          <p style={{ fontFamily: Fm, fontSize: 11, color: C.muted, margin: "2px 0 0" }}>Stop {stopNum} of {totalStops}</p>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <p style={{ fontFamily: Fm, fontSize: 10, color: C.muted, margin: 0, textTransform: "uppercase", letterSpacing: 1 }}>Time</p>
+          <p style={{ fontFamily: Fm, fontSize: 24, fontWeight: 700, color: penaltySec > 0 ? C.warn : C.text, margin: 0 }}>{fmt(totalSec)}</p>
+          {penaltySec > 0 && <p style={{ fontFamily: Fm, fontSize: 10, color: C.warn, margin: 0 }}>+{fmt(penaltySec)} penalties</p>}
+        </div>
+      </div>
+
+      <div style={{ height: 4, background: C.border, borderRadius: 2, marginBottom: 22, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: ((stopIdx / (totalStops - 1)) * 100) + "%", background: "linear-gradient(90deg," + C.goldDim + "," + C.gold + ")", transition: "width .6s" }}/>
+      </div>
+
+      {ttsError && (
+        <div style={{ background: C.dangerBg, border: "1px solid " + C.danger + "44", borderRadius: 8, padding: "10px 14px", marginBottom: 14, fontSize: 12, color: C.danger, fontFamily: Fm, lineHeight: 1.5 }}>
+          🔊 {ttsError}
+        </div>
+      )}
+
+      {phase === "clue" && (
+        <div>
+          <div style={Object.assign({}, cardStyle, { marginBottom: 14 })}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <span style={Object.assign({}, tagStyle, { margin: 0, color: C.goldDim })}>📜 Clue — Stop {stopNum} of {totalStops}</span>
+              <ListenBtn text={loc.clue} speaking={speaking} loading={ttsLoading} onSpeak={speak} onStop={stopAll}/>
+            </div>
+            <p style={{ fontSize: 15, lineHeight: 1.85, color: C.text, margin: 0 }}>{loc.clue}</p>
+          </div>
+          {hintLevel >= 1 && (
+            <div style={{ background: C.warnBg, border: "1px solid " + C.warn + "44", borderRadius: 10, padding: 16, marginBottom: 12 }}>
+              <span style={Object.assign({}, tagStyle, { color: C.warn })}>💡 Hint 1 of 2</span>
+              <p style={{ fontSize: 14, color: C.text, margin: 0, lineHeight: 1.7 }}>{loc.hint1}</p>
+            </div>
+          )}
+          {hintLevel >= 2 && (
+            <div style={{ background: C.warnBg, border: "1px solid " + C.warn + "66", borderRadius: 10, padding: 16, marginBottom: 12 }}>
+              <span style={Object.assign({}, tagStyle, { color: C.warn })}>💡 Hint 2 of 2 (final)</span>
+              <p style={{ fontSize: 14, color: C.text, margin: 0, lineHeight: 1.7 }}>{loc.hint2}</p>
+            </div>
+          )}
+          {hintLevel === 3 && (
+            <div style={{ background: "rgba(201,148,76,.18)", border: "1px solid " + C.warn, borderRadius: 10, padding: 16, marginBottom: 12, textAlign: "center" }}>
+              <p style={{ fontFamily: Fd, fontSize: 18, fontWeight: 700, color: C.warn, margin: "0 0 4px" }}>📍 Answer: {loc.name}</p>
+              <p style={{ fontFamily: Fm, fontSize: 12, color: C.muted, margin: 0 }}>+10:00 penalty added · Proceeding in a moment…</p>
+            </div>
+          )}
+          {feedback && feedback.type === "wrong" && (
+            <div style={{ background: C.dangerBg, border: "1px solid " + C.danger + "44", borderRadius: 8, padding: "10px 14px", marginBottom: 12, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+              <p style={{ color: C.danger, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{feedback.msg}</p>
+              <span style={{ fontFamily: Fm, fontSize: 12, color: C.danger, fontWeight: 700, whiteSpace: "nowrap" }}>+{fmt(feedback.penalty)}</span>
+            </div>
+          )}
+          {hintLevel < 3 && (
+            <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+              <input style={Object.assign({}, inpStyle, { flex: 1 })} placeholder="Where are you going?" value={guess} onChange={function(e) { setGuess(e.target.value); }} onKeyDown={function(e) { if (e.key === "Enter") submitGuess(); }}/>
+              <button style={Object.assign({}, Btn.gold, { width: "auto", padding: "12px 20px", fontSize: 14, flexShrink: 0 })} onClick={submitGuess}>Go</button>
+            </div>
+          )}
+          {hintLevel > 0 && hintLevel < 3 && (
+            <p style={{ fontSize: 12, color: C.muted, margin: "8px 0 0", fontStyle: "italic", textAlign: "center" }}>
+              {hintLevel === 1 ? "1 hint used · 1 remaining · 1 more wrong reveals answer (+10:00)" : "2 hints used · 1 more wrong reveals the location (+10:00)"}
+            </p>
+          )}
+        </div>
+      )}
+
+      {phase === "traveling" && (
+        <div>
+          <div style={{ background: "linear-gradient(135deg,rgba(201,168,76,.14),rgba(201,168,76,.04))", border: "1px solid " + C.gold + "55", borderRadius: 14, padding: "22px 20px", marginBottom: 14, textAlign: "center" }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{loc.emoji}</div>
+            <span style={Object.assign({}, tagStyle, { color: C.goldDim, display: "block" })}>{hintLevel === 3 ? "📍 Destination Revealed" : "✅ Correct! Head to"}</span>
+            <h2 style={{ fontFamily: Fd, fontSize: 26, fontWeight: 700, color: C.gold, margin: "0 0 4px" }}>{loc.name}</h2>
+            {loc.subtitle && <p style={{ fontFamily: Fm, fontSize: 12, color: C.muted, margin: "0 0 8px" }}>{loc.subtitle}</p>}
+            {hintLevel === 3 && <p style={{ fontFamily: Fm, fontSize: 11, color: C.warn, margin: 0 }}>+10:00 penalty applied</p>}
+          </div>
+          <button style={Object.assign({}, Btn.muted, { marginBottom: 10 })} onClick={function() { window.open("https://www.google.com/maps/dir/?api=1&destination=" + loc.lat + "," + loc.lng + "&travelmode=walking", "_blank"); }}>
+            🗺️ Get Walking Directions
+          </button>
+          <div style={cardStyle}>
+            <p style={{ fontFamily: Fm, fontSize: 11, color: C.muted, margin: "0 0 12px", textTransform: "uppercase", letterSpacing: 1 }}>👁 Check in when you arrive to unlock the ghost story</p>
+            <button
+              style={Object.assign({}, Btn.gold, { background: gpsStatus === "ok" ? C.success : "transparent", borderColor: gpsStatus === "ok" ? C.success : C.gold, color: gpsStatus === "ok" ? "#000" : C.gold })}
+              onClick={handleCheckIn}
+              disabled={gpsStatus === "checking" || gpsStatus === "ok"}>
+              {gpsStatus === "checking" ? "📡 Checking GPS…" : gpsStatus === "ok" ? "✅ Location Confirmed!" : "📍 I'm Here — Check In"}
+            </button>
+            {gpsStatus === "fail" && (
+              <div>
+                <p style={{ color: C.danger, fontSize: 13, margin: "10px 0 2px", lineHeight: 1.5 }}>{gpsMsg}</p>
+                {distM && <p style={{ fontFamily: Fm, fontSize: 11, color: C.muted, margin: "2px 0 0" }}>Detected distance: ~{distM}m</p>}
+              </div>
+            )}
+            {showOverride && (
+              <button style={Object.assign({}, Btn.warn, { marginTop: 10 })} onClick={function() { setShowOverride(false); confirmArrival(); }}>
+                ✋ Manual Check-In (I'm standing here)
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {phase === "ghost" && (
+        <div>
+          <div style={{ background: C.purpleBg, border: "1px solid " + C.purple + "44", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <span style={Object.assign({}, tagStyle, { margin: 0, color: C.purple })}>👻 Ghost Story — {loc.name}</span>
+              <ListenBtn text={loc.ghost} speaking={speaking} loading={ttsLoading} onSpeak={speak} onStop={stopAll}/>
+            </div>
+            <p style={{ fontSize: 15, lineHeight: 1.85, color: C.text, margin: 0 }}>{loc.ghost}</p>
+          </div>
+          <button style={Btn.gold} onClick={nextStop}>
+            {isLast ? "🏆 Finish the Hunt" : "Next Clue →"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+var loadingEl = document.getElementById("loading");
+if (loadingEl) loadingEl.remove();
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
