@@ -35,7 +35,7 @@ input{font-family:inherit}
 .centerbox{max-width:390px;width:100%}
 
 .splashbg{background:radial-gradient(ellipse at 50% 25%,#1a1a2a,var(--bg) 65%)}
-.donebg{background:radial-gradient(ellipse at 50% 30%,#0e1f0e,var(--bg) 65%)}
+.donebg{background:radial-gradient(ellipse at 50% 22%,#0e1f0e,var(--bg) 62%);min-height:100vh}
 
 h1.logo{font-family:var(--Fd);font-size:50px;font-weight:900;color:var(--gold);line-height:1.05;margin:6px 0;letter-spacing:-1px}
 h1.logo em{font-weight:400;font-size:26px;color:var(--muted)}
@@ -57,6 +57,7 @@ h1.logo em{font-weight:400;font-size:26px;color:var(--muted)}
 .btn.okbtn{background:var(--success);border-color:var(--success);color:#000}
 
 .backlink{background:none;border:none;color:var(--gold);font-family:var(--Fb);font-size:15px;padding:4px 0 12px;display:block}
+.linkbtn{background:none;border:none;padding:0;font-family:var(--Fm);font-size:11px;color:var(--muted);text-decoration:underline}
 
 h2.head{font-family:var(--Fd);font-size:26px;font-weight:700;color:var(--gold);margin:0 0 8px}
 .lede{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 24px}
@@ -77,6 +78,9 @@ input.txt:focus{border-color:var(--gold)}
 .hdr .tlab{font-family:var(--Fm);font-size:10px;color:var(--muted);margin:0;text-transform:uppercase;letter-spacing:1px}
 .hdr .tval{font-family:var(--Fm);font-size:24px;font-weight:700;margin:0}
 .hdr .pen{font-family:var(--Fm);font-size:10px;color:var(--warn);margin:0}
+
+.resumed{background:rgba(76,201,106,.1);border:1px solid rgba(76,201,106,.3);border-radius:8px;
+         padding:9px 13px;margin-bottom:14px;font-family:var(--Fm);font-size:11px;color:var(--success)}
 
 .bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:22px;overflow:hidden}
 .bar>div{height:100%;background:linear-gradient(90deg,var(--goldDim),var(--gold));transition:width .6s}
@@ -126,6 +130,25 @@ input.txt:focus{border-color:var(--gold)}
 .finaltime{font-family:var(--Fm);font-size:46px;font-weight:700;margin:0}
 .mt{margin-top:24px}
 .mb{margin-bottom:10px}
+
+/* ---- finish summary ---- */
+.sumwrap{max-width:520px;margin:0 auto;padding:26px 16px 64px;text-align:center}
+.srow{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);text-align:left}
+.srow:last-child{border-bottom:none}
+.sn{font-family:var(--Fm);font-size:12px;color:var(--muted);width:20px;flex-shrink:0;padding-top:3px}
+.sp{flex:1;min-width:0}
+.sp b{display:block;font-family:var(--Fd);font-size:14px;font-weight:600;color:var(--text)}
+.sp span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.st{font-family:var(--Fm);font-size:12px;color:var(--gold);flex-shrink:0;padding-top:4px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.stat{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:11px 8px}
+.stat b{display:block;font-family:var(--Fm);font-size:20px;color:var(--gold)}
+.stat span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.split{display:flex;justify-content:space-around;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.split div{font-family:var(--Fm);font-size:11px;color:var(--muted)}
+.split b{display:block;font-size:15px;color:var(--text);margin-top:3px}
+.seclab{font-family:var(--Fm);font-size:10px;text-transform:uppercase;letter-spacing:2px;
+        color:var(--muted);text-align:left;margin:26px 0 8px}
 </style>
 </head>
 <body>
@@ -136,12 +159,15 @@ input.txt:focus{border-color:var(--gold)}
 "use strict";
 
 /* ============================================================
-   CONFIG — edit these two lines if you change voice or key
+   CONFIG
    ============================================================ */
-var EL_API_KEY  = "sk_30c7172559a81951acfc69e805d6b02dec11243a80ac4806";
-var EL_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";           // "Daniel" — deep British male
-var EL_URL      = "https://api.elevenlabs.io/v1/text-to-speech/" + EL_VOICE_ID;
-var GPS_RADIUS  = 50;                                // metres allowed for check-in
+/* Narration is served as pre-made MP3s from the /audio folder.
+   Nothing is generated at runtime, so there is no API quota to
+   exhaust and no key in this file.  To create the MP3s, open
+   this page once with ?generate on the end of the URL.        */
+var AUDIO_DIR   = "audio/";
+var EL_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";        // "Daniel" — deep British male
+var GPS_RADIUS  = 50;                             // metres allowed for check-in
 
 /* ============================================================
    LOCATIONS  (18 possible stops + fixed start & finish)
@@ -340,7 +366,8 @@ var S = {
   screen:"splash", teamNum:null, teamName:"",
   stopIdx:0, phase:"clue", hintLevel:0, feedback:null,
   gpsStatus:"idle", gpsMsg:"", gpsDist:null, showOverride:false,
-  startMs:null, penaltySec:0, finalSec:null,
+  startMs:null, penaltySec:0, finalSec:null, finishedAt:null,
+  log:[], resumed:false,
   speaking:false, ttsLoading:false, ttsError:""
 };
 
@@ -355,56 +382,138 @@ function elapsedSec(){
   return Math.floor((Date.now()-S.startMs)/1000)+S.penaltySec;
 }
 
+/* per-stop record that feeds the finish summary */
+function rec(){
+  if(!S.log[S.stopIdx]){
+    var L=curLoc();
+    S.log[S.stopIdx]={
+      name:L?L.name:"?", wrong:0, hints:0, revealed:false,
+      penalty:0, arrivedSec:null, manual:false
+    };
+  }
+  return S.log[S.stopIdx];
+}
+
 /* ============================================================
-   AUDIO  (ElevenLabs, with prefetch + cache)
+   SAVED PROGRESS  (survives reloads, locked screens, crashes)
    ============================================================ */
+var SAVE_KEY="shadows_of_dublin_v1";
+
+function save(){
+  try{
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      v:1, screen:S.screen, teamNum:S.teamNum, teamName:S.teamName,
+      stopIdx:S.stopIdx, phase:S.phase, hintLevel:S.hintLevel,
+      startMs:S.startMs, penaltySec:S.penaltySec,
+      finalSec:S.finalSec, finishedAt:S.finishedAt, log:S.log
+    }));
+  }catch(e){ /* private mode or full storage — game still playable */ }
+}
+
+function load(){
+  try{
+    var raw=localStorage.getItem(SAVE_KEY);
+    if(!raw) return false;
+    var d=JSON.parse(raw);
+    if(!d || !d.teamNum) return false;
+    S.screen     = d.screen || "hunt";
+    S.teamNum    = d.teamNum;
+    S.teamName   = d.teamName || "";
+    S.stopIdx    = d.stopIdx || 0;
+    S.phase      = d.phase || "clue";
+    S.hintLevel  = d.hintLevel || 0;
+    S.startMs    = d.startMs || null;
+    S.penaltySec = d.penaltySec || 0;
+    S.finalSec   = (typeof d.finalSec === "number") ? d.finalSec : null;
+    S.finishedAt = d.finishedAt || null;
+    S.log        = d.log || [];
+    return true;
+  }catch(e){ return false; }
+}
+
+function wipe(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+
+/* ============================================================
+   AUDIO  —  pre-made MP3 files, with a device-voice fallback
+   ============================================================ */
+var preloaded={};        /* "loc_a-clue" -> Audio element, or "missing" */
+
+function akey(id,kind){ return id+"-"+kind; }
+function apath(id,kind){ return AUDIO_DIR+id+"-"+kind+".mp3"; }
+function atext(id,kind){ return kind==="clue" ? LOCS[id].clue : LOCS[id].ghost; }
+
+/* Load the file into an <audio> element ahead of time so that the
+   later play() call happens inside the tap, which mobile requires. */
+function preload(id,kind){
+  var k=akey(id,kind);
+  if(preloaded[k]) return;
+  var a=new Audio();
+  a.preload="auto"; a.playsInline=true; a.setAttribute("playsinline","");
+  a.addEventListener("error",function(){ preloaded[k]="missing"; },{once:true});
+  a.src=apath(id,kind);
+  try{ a.load(); }catch(e){}
+  preloaded[k]=a;
+}
+
 function stopAudio(){
-  if(audioEl){ try{audioEl.pause();}catch(e){} if(audioEl.parentNode) audioEl.parentNode.removeChild(audioEl); audioEl=null; }
+  if(audioEl){
+    try{ audioEl.pause(); audioEl.currentTime=0; }catch(e){}
+    audioEl=null;
+  }
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
   S.speaking=false; S.ttsLoading=false;
 }
-function fetchAudio(text){
-  if(audioCache[text]) return Promise.resolve(audioCache[text]);
-  return fetch(EL_URL,{
-    method:"POST",
-    headers:{"Accept":"audio/mpeg","Content-Type":"application/json","xi-api-key":EL_API_KEY},
-    body:JSON.stringify({text:text,model_id:"eleven_multilingual_v2",
-      voice_settings:{stability:0.5,similarity_boost:0.8,style:0.3,use_speaker_boost:true}})
-  }).then(function(r){
-    if(!r.ok) return r.text().then(function(t){ throw new Error("API "+r.status+" "+t.slice(0,90)); });
-    return r.blob();
-  }).then(function(b){
-    var url=URL.createObjectURL(b); audioCache[text]=url; return url;
-  });
+
+/* Fallback: the phone's built-in voice.  Not as good, but it always works. */
+function deviceSpeak(text){
+  if(!window.speechSynthesis){ S.ttsNote="No narration available on this device."; render(); return; }
+  window.speechSynthesis.cancel();
+  var go=function(){
+    var vs=window.speechSynthesis.getVoices();
+    var v = pickVoice(vs,"en-IE") || pickVoice(vs,"en-GB") || pickVoice(vs,"en");
+    var u=new SpeechSynthesisUtterance(text);
+    if(v) u.voice=v;
+    u.rate=0.85; u.pitch=0.8;
+    u.onstart=function(){ S.speaking=true; render(); };
+    u.onend=function(){ S.speaking=false; render(); };
+    u.onerror=function(){ S.speaking=false; render(); };
+    window.speechSynthesis.speak(u);
+  };
+  if(window.speechSynthesis.getVoices().length) go();
+  else window.speechSynthesis.addEventListener("voiceschanged",go,{once:true});
 }
-function playURL(url){
-  var a=new Audio(url);
-  a.preload="auto"; a.playsInline=true; a.setAttribute("playsinline","");
-  document.body.appendChild(a);
-  audioEl=a;
-  a.onended=function(){ stopAudio(); render(); };
-  a.onerror=function(){ S.ttsError="Playback error"; stopAudio(); render(); };
-  var p=a.play();
-  if(p&&p.then){
-    p.then(function(){ S.speaking=true; render(); })
-     .catch(function(e){ S.ttsError="Play blocked: "+e.message; stopAudio(); render(); });
-  }else{ S.speaking=true; render(); }
+function pickVoice(list,prefix){
+  for(var i=0;i<list.length;i++){ if(list[i].lang && list[i].lang.indexOf(prefix)===0) return list[i]; }
+  return null;
 }
-function speak(text){
-  stopAudio(); S.ttsError="";
-  if(audioCache[text]){ playURL(audioCache[text]); return; }
-  S.ttsLoading=true; render();
-  fetchAudio(text).then(function(url){
-    S.ttsLoading=false; playURL(url);
-  }).catch(function(e){
-    S.ttsLoading=false; S.ttsError="Voice unavailable: "+e.message; render();
-  });
+
+function speak(id,kind){
+  stopAudio(); S.ttsError=""; S.ttsNote="";
+  var k=akey(id,kind), a=preloaded[k];
+
+  if(a && a!=="missing"){
+    audioEl=a;
+    a.onended=function(){ S.speaking=false; audioEl=null; render(); };
+    var p=a.play();
+    if(p && p.then){
+      p.then(function(){ S.speaking=true; render(); })
+       .catch(function(){
+         audioEl=null;
+         S.ttsNote="Narration file not found \u2014 using this device\u2019s voice.";
+         deviceSpeak(atext(id,kind));
+       });
+    }else{ S.speaking=true; render(); }
+    return;
+  }
+
+  S.ttsNote="Narration file not found \u2014 using this device\u2019s voice.";
+  deviceSpeak(atext(id,kind));
 }
+
 function prefetch(){
-  var loc=curLoc(); if(!loc) return;
-  if(S.phase!=="clue" && S.phase!=="ghost") return;
-  var t = S.phase==="clue" ? loc.clue : loc.ghost;
-  if(audioCache[t]) return;
-  fetchAudio(t).catch(function(){ /* silent — retried on tap */ });
+  var id=curId(); if(!id) return;
+  if(S.phase==="clue")  preload(id,"clue");
+  if(S.phase==="ghost") preload(id,"ghost");
 }
 
 /* ============================================================
@@ -446,24 +555,114 @@ function viewSetup(){
     '<label class="lbl">Team Name</label>'+
     '<input class="txt" id="tname" maxlength="30" placeholder="e.g. The Banshee Chasers" value="'+esc(S.teamName)+'">'+
     '<button class="btn mt" data-act="begin"'+(ready?"":" disabled")+'>Start the Hunt \u{1F47B}</button>'+
-    '<p class="note">Ten stops, roughly three hours on foot. Wrong guesses cost you time.</p>'+
+    '<p class="note">Ten stops, roughly three hours on foot. Your progress saves automatically \u2014 '+
+      'you can lock your phone or reload without losing anything.</p>'+
   '</div>';
+}
+
+/* ---- rolled-up stats, shared by the screen and the text export ---- */
+function tally(){
+  var o={clean:0,hints:0,reveals:0,manual:0,wrong:0,stops:0};
+  for(var i=0;i<S.log.length;i++){
+    var r=S.log[i]; if(!r) continue;
+    o.stops++;
+    if(r.wrong===0) o.clean++;
+    o.wrong+=r.wrong; o.hints+=r.hints;
+    if(r.revealed) o.reveals++;
+    if(r.manual) o.manual++;
+  }
+  return o;
+}
+
+function stopDetail(r){
+  if(r.revealed) return "location revealed (+10:00)";
+  if(r.wrong===0) return "solved first try";
+  return r.wrong+" wrong \u00B7 "+r.hints+" hint"+(r.hints===1?"":"s")+" (+"+fmt(r.penalty)+")";
+}
+
+/* ---- plain-text summary for clipboard / email ---- */
+function buildSummary(){
+  var t=S.finalSec!==null?S.finalSec:elapsedSec();
+  var g=tally();
+  var when=S.finishedAt?new Date(S.finishedAt).toLocaleString():"";
+  var L=[];
+  L.push("SHADOWS OF DUBLIN \u2014 HUNT RESULTS");
+  L.push("========================================");
+  L.push("Team "+S.teamNum+": "+S.teamName);
+  if(when) L.push("Finished: "+when);
+  L.push("");
+  L.push("FINAL TIME:   "+fmt(t));
+  L.push("  Walking:    "+fmt(Math.max(0,t-S.penaltySec)));
+  L.push("  Penalties:  "+fmt(S.penaltySec));
+  L.push("");
+  L.push("STOP BY STOP");
+  L.push("----------------------------------------");
+  for(var i=0;i<S.log.length;i++){
+    var r=S.log[i]; if(!r) continue;
+    L.push((i+1)+". "+r.name);
+    L.push("    "+stopDetail(r)+
+      (r.arrivedSec!==null?"  |  arrived "+fmt(r.arrivedSec):"")+
+      (r.manual?"  |  manual check-in":""));
+  }
+  L.push("");
+  L.push("TOTALS");
+  L.push("----------------------------------------");
+  L.push("Solved first try:    "+g.clean+" of "+g.stops);
+  L.push("Wrong guesses:       "+g.wrong);
+  L.push("Hints used:          "+g.hints);
+  L.push("Locations revealed:  "+g.reveals);
+  L.push("Manual check-ins:    "+g.manual);
+  return L.join("\n");
 }
 
 function viewComplete(){
   var t=S.finalSec!==null?S.finalSec:elapsedSec();
+  var g=tally();
+  var when=S.finishedAt?new Date(S.finishedAt).toLocaleString():"";
+
+  var rows="";
+  for(var i=0;i<S.log.length;i++){
+    var r=S.log[i]; if(!r) continue;
+    rows+='<div class="srow">'+
+            '<div class="sn">'+(i+1)+'</div>'+
+            '<div class="sp"><b>'+esc(r.name)+'</b><span>'+esc(stopDetail(r))+
+              (r.manual?" \u00B7 manual check-in":"")+'</span></div>'+
+            '<div class="st">'+(r.arrivedSec===null?"\u2014":fmt(r.arrivedSec))+'</div>'+
+          '</div>';
+  }
+
   return ''+
-  '<div class="center donebg"><div class="centerbox">'+
-    '<div style="font-size:68px">\u{1F3C6}</div>'+
-    '<h2 class="head" style="font-size:38px">Hunt Complete!</h2>'+
-    '<p class="tagline">'+esc(S.teamName)+'</p>'+
-    '<div class="shamrock" style="color:var(--success)">\u2618 \u2618 \u2618</div>'+
+  '<div class="donebg"><div class="sumwrap">'+
+    '<div style="font-size:60px">\u{1F3C6}</div>'+
+    '<h2 class="head" style="font-size:34px;margin-bottom:2px">Hunt Complete!</h2>'+
+    '<p class="tagline" style="margin-top:0">'+esc(S.teamName)+'</p>'+
+    '<p class="route">Team '+S.teamNum+(when?' \u00B7 '+esc(when):'')+'</p>'+
+
     '<div class="card">'+
       '<p class="mini" style="margin-bottom:4px">Final Time</p>'+
       '<p class="finaltime">'+fmt(t)+'</p>'+
-      (S.penaltySec>0?'<p style="font-family:var(--Fm);font-size:12px;color:var(--warn);margin:6px 0 0">includes '+fmt(S.penaltySec)+' in penalties</p>':'')+
+      '<div class="split">'+
+        '<div>Walking<b>'+fmt(Math.max(0,t-S.penaltySec))+'</b></div>'+
+        '<div>Penalties<b style="color:'+(S.penaltySec>0?'var(--warn)':'var(--text)')+'">'+fmt(S.penaltySec)+'</b></div>'+
+      '</div>'+
     '</div>'+
-    '<p class="fine">You\u2019ve walked the haunted streets of Dublin and lived to tell the tale. The spirits thank you \u2014 and hope you\u2019ll return.</p>'+
+
+    '<div class="stats">'+
+      '<div class="stat"><b>'+g.clean+'/'+g.stops+'</b><span>solved first try</span></div>'+
+      '<div class="stat"><b>'+g.wrong+'</b><span>wrong guesses</span></div>'+
+      '<div class="stat"><b>'+g.hints+'</b><span>hints used</span></div>'+
+      '<div class="stat"><b>'+g.reveals+'</b><span>revealed</span></div>'+
+    '</div>'+
+
+    '<p class="seclab">Stop by stop</p>'+
+    '<div class="card" style="padding:4px 16px">'+rows+'</div>'+
+
+    '<button class="btn mt" data-act="copy">\u{1F4CB} Copy Results</button>'+
+    '<button class="btn ghostbtn" style="margin-top:8px" data-act="email">\u2709\uFE0F Email Results</button>'+
+
+    '<p class="fine">You\u2019ve walked the haunted streets of Dublin and lived to tell the tale. '+
+      'Send your results to your instructor \u2014 then rest. The spirits have earned it too.</p>'+
+    '<button class="btn ghostbtn" style="margin-top:16px;opacity:.55" data-act="reset">\u21BA Start a New Hunt</button>'+
   '</div></div>';
 }
 
@@ -475,12 +674,18 @@ function viewHunt(){
   h+='<div class="wrap">';
   h+='<div class="hdr"><div>'+
        '<p class="tname">'+esc(S.teamName)+'</p>'+
-       '<p class="tsub">Stop '+num+' of '+total+'</p></div>'+
+       '<p class="tsub">Stop '+num+' of '+total+' \u00B7 '+
+         '<button class="linkbtn" data-act="reset">start over</button></p></div>'+
      '<div style="text-align:right">'+
        '<p class="tlab">Time</p>'+
        '<p class="tval" id="clock" style="color:'+(S.penaltySec>0?"var(--warn)":"var(--text)")+'">'+fmt(elapsedSec())+'</p>'+
        (S.penaltySec>0?'<p class="pen">+'+fmt(S.penaltySec)+' penalties</p>':'')+
      '</div></div>';
+
+  if(S.resumed){
+    h+='<div class="resumed">\u2713 Progress restored \u2014 picking up where you left off.</div>';
+  }
+
   h+='<div class="bar"><div style="width:'+pct+'%"></div></div>';
 
   if(S.ttsError) h+='<div class="errbox">\u{1F50A} '+esc(S.ttsError)+'</div>';
@@ -579,32 +784,136 @@ function tick(){
 }
 
 /* ============================================================
-   ACTIONS
+   GENERATOR  —  open this page with ?generate to build the MP3s
    ============================================================ */
+function genItems(){
+  var out=[],id;
+  for(id in LOCS){
+    if(!LOCS.hasOwnProperty(id)) continue;
+    out.push({id:id,kind:"clue", name:LOCS[id].name, text:LOCS[id].clue});
+    out.push({id:id,kind:"ghost",name:LOCS[id].name, text:LOCS[id].ghost});
+  }
+  return out;
+}
+
+function viewGenerate(){
+  var items=genItems(), chars=0;
+  for(var i=0;i<items.length;i++) chars+=items[i].text.length;
+  return ''+
+  '<div class="wrap">'+
+    '<h2 class="head">Narration Builder</h2>'+
+    '<p class="lede">Run this once to create the MP3 files. Paste an ElevenLabs API key, '+
+      'generate, then put every downloaded file into an <b>audio</b> folder beside index.html '+
+      'and commit it. After that the hunt needs no API key and no quota at all.</p>'+
+
+    '<div class="card" style="margin-bottom:16px">'+
+      '<div class="split" style="border:none;margin:0;padding:0">'+
+        '<div>Files<b>'+items.length+'</b></div>'+
+        '<div>Characters<b>'+chars.toLocaleString()+'</b></div>'+
+      '</div>'+
+      '<p class="note" style="margin-top:14px">The free ElevenLabs plan allows 10,000 characters '+
+        'per month, so this run needs a paid month (Starter is about $5 for 30,000). '+
+        'You only pay for it once \u2014 the files are yours afterwards.</p>'+
+    '</div>'+
+
+    '<label class="lbl" style="margin-top:0">ElevenLabs API Key</label>'+
+    '<input class="txt" id="genkey" type="password" placeholder="sk_..." autocomplete="off">'+
+    '<button class="btn mt" data-act="gen-run">Generate '+items.length+' files</button>'+
+    '<p class="note">Your browser will ask permission to download multiple files \u2014 allow it. '+
+      'Run this from your hosted https:// address rather than a local file.</p>'+
+
+    '<div id="genlog" style="margin-top:18px"></div>'+
+  '</div>';
+}
+
+function genLog(msg,color){
+  var box=document.getElementById("genlog");
+  if(!box) return;
+  var p=document.createElement("p");
+  p.style.cssText="font-family:var(--Fm);font-size:12px;margin:4px 0;color:"+(color||"var(--muted)");
+  p.textContent=msg;
+  box.appendChild(p);
+  p.scrollIntoView({block:"nearest"});
+}
+
+function genRun(){
+  var keyEl=document.getElementById("genkey");
+  var key=keyEl?keyEl.value.trim():"";
+  if(!key){ alert("Paste your ElevenLabs API key first."); return; }
+
+  var btn=document.querySelector('[data-act="gen-run"]');
+  if(btn){ btn.setAttribute("disabled",""); btn.textContent="Generating\u2026"; }
+
+  var items=genItems(), i=0, failed=0;
+
+  function step(){
+    if(i>=items.length){
+      genLog("", null);
+      genLog(failed
+        ? "Finished with "+failed+" failure(s). Re-run to retry those."
+        : "All done. Move the downloads into your /audio folder.",
+        failed?"var(--warn)":"var(--success)");
+      if(btn){ btn.removeAttribute("disabled"); btn.textContent="Generate again"; }
+      return;
+    }
+    var it=items[i], fname=it.id+"-"+it.kind+".mp3";
+    genLog("["+(i+1)+"/"+items.length+"] "+fname+" \u2026");
+
+    fetch("https://api.elevenlabs.io/v1/text-to-speech/"+EL_VOICE_ID,{
+      method:"POST",
+      headers:{"Accept":"audio/mpeg","Content-Type":"application/json","xi-api-key":key},
+      body:JSON.stringify({text:it.text,model_id:"eleven_multilingual_v2",
+        voice_settings:{stability:0.5,similarity_boost:0.8,style:0.3,use_speaker_boost:true}})
+    }).then(function(r){
+      if(!r.ok) return r.text().then(function(t){ throw new Error("HTTP "+r.status+" "+t.slice(0,110)); });
+      return r.blob();
+    }).then(function(blob){
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement("a");
+      a.href=url; a.download=fname;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); },5000);
+      genLog("    saved "+fname,"var(--success)");
+      i++; setTimeout(step,900);
+    }).catch(function(e){
+      failed++;
+      genLog("    FAILED "+fname+" \u2014 "+e.message,"var(--danger)");
+      i++; setTimeout(step,900);
+    });
+  }
+  step();
+}
 function submitGuess(){
   var box=document.getElementById("guess");
   if(!box) return;
   var val=box.value;
   if(!val.trim()) return;
 
+  S.resumed=false;
+  var R=rec();
+
   if(matches(val,curId())){
-    S.feedback=null; S.phase="traveling"; stopAudio(); render(); prefetch(); return;
+    S.feedback=null; S.phase="traveling";
+    stopAudio(); render(); save(); prefetch(); return;
   }
+
+  R.wrong++;
   if(S.hintLevel===0){
-    S.penaltySec+=120; S.hintLevel=1;
+    S.penaltySec+=120; R.penalty+=120; R.hints=1; S.hintLevel=1;
     S.feedback={msg:"Not quite. Here\u2019s your first hint.",penalty:120};
   }else if(S.hintLevel===1){
-    S.penaltySec+=120; S.hintLevel=2;
+    S.penaltySec+=120; R.penalty+=120; R.hints=2; S.hintLevel=2;
     S.feedback={msg:"Still not it. One final hint.",penalty:120};
   }else{
-    S.penaltySec+=600; S.hintLevel=3;
+    S.penaltySec+=600; R.penalty+=600; R.revealed=true; S.hintLevel=3;
     S.feedback={msg:"Out of hints \u2014 the location has been revealed.",penalty:600};
   }
-  render();
+  render(); save();
 }
 
 function doCheckIn(){
   var loc=curLoc();
+  S.resumed=false;
   S.gpsStatus="checking"; S.gpsMsg=""; S.gpsDist=null; S.showOverride=false; render();
 
   if(!navigator.geolocation){
@@ -613,7 +922,7 @@ function doCheckIn(){
   navigator.geolocation.getCurrentPosition(function(pos){
     var d=haversine(pos.coords.latitude,pos.coords.longitude,loc.lat,loc.lng);
     S.gpsDist=Math.round(d);
-    if(d<=GPS_RADIUS){ arrive(); }
+    if(d<=GPS_RADIUS){ arrive(false); }
     else{
       S.gpsStatus="fail";
       S.gpsMsg="You\u2019re about "+Math.round(d)+" m away. Move closer and try again.";
@@ -628,24 +937,51 @@ function doCheckIn(){
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
 
-function arrive(){
-  S.gpsStatus="ok"; render();
+function arrive(manualFlag){
+  var R=rec();
+  R.arrivedSec=elapsedSec();
+  R.manual=!!manualFlag;
+  S.gpsStatus="ok"; render(); save();
   setTimeout(function(){
     S.phase="ghost"; S.gpsStatus="idle"; S.showOverride=false; S.gpsDist=null;
-    stopAudio(); render(); prefetch();
+    stopAudio(); render(); save(); prefetch();
   },700);
 }
 
 function nextStop(){
   var r=route();
+  S.resumed=false;
   if(S.stopIdx+1>=r.length){
     S.finalSec=elapsedSec();
+    S.finishedAt=Date.now();
     if(ticker){ clearInterval(ticker); ticker=null; }
-    stopAudio(); S.screen="complete"; render(); return;
+    stopAudio(); S.screen="complete"; render(); save(); return;
   }
   S.stopIdx++; S.phase="clue"; S.hintLevel=0; S.feedback=null;
   S.gpsStatus="idle"; S.gpsMsg=""; S.gpsDist=null; S.showOverride=false; S.ttsError="";
-  stopAudio(); render(); prefetch();
+  rec();
+  stopAudio(); render(); save(); prefetch();
+}
+
+/* ---- clipboard, with a fallback for older mobile browsers ---- */
+function copyText(txt,onDone){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(onDone).catch(function(){ legacyCopy(txt,onDone); });
+  }else{ legacyCopy(txt,onDone); }
+}
+function legacyCopy(txt,onDone){
+  try{
+    var ta=document.createElement("textarea");
+    ta.value=txt;
+    ta.style.position="fixed"; ta.style.left="-9999px";
+    document.body.appendChild(ta);
+    ta.focus(); ta.select(); ta.setSelectionRange(0,txt.length);
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    onDone();
+  }catch(e){
+    alert("Couldn\u2019t copy automatically \u2014 please screenshot this page instead.");
+  }
 }
 
 /* ============================================================
@@ -657,41 +993,107 @@ document.addEventListener("click",function(ev){
   var act=el.getAttribute("data-act");
 
   if(act==="to-setup"){ S.screen="setup"; render(); }
+
   else if(act==="to-splash"){ S.screen="splash"; render(); }
+
   else if(act==="team"){ S.teamNum=parseInt(el.getAttribute("data-n"),10); render(); }
+
   else if(act==="begin"){
-    if(!S.teamNum||!S.teamName.trim()) return;
+    if(!S.teamNum || !S.teamName.trim()) return;
     S.screen="hunt"; S.stopIdx=0; S.phase="clue"; S.hintLevel=0; S.feedback=null;
-    S.startMs=Date.now(); S.penaltySec=0; S.finalSec=null;
-    audioCache={};
+    S.startMs=Date.now(); S.penaltySec=0; S.finalSec=null; S.finishedAt=null;
+    S.log=[]; S.resumed=false; audioCache={};
     if(ticker) clearInterval(ticker);
     ticker=setInterval(tick,1000);
-    render(); prefetch();
+    rec();
+    render(); save(); prefetch();
   }
+
   else if(act==="guess"){ submitGuess(); }
-  else if(act==="proceed"){ S.phase="traveling"; S.feedback=null; stopAudio(); render(); prefetch(); }
-  else if(act==="listen"){
-    var loc=curLoc(); if(!loc) return;
-    if(S.speaking||S.ttsLoading){ stopAudio(); render(); }
-    else{ speak(S.phase==="ghost"?loc.ghost:loc.clue); }
+
+  else if(act==="proceed"){
+    S.phase="traveling"; S.feedback=null; S.resumed=false;
+    stopAudio(); render(); save(); prefetch();
   }
+
+  else if(act==="listen"){
+    var id=curId(); if(!id) return;
+    if(S.speaking||S.ttsLoading){ stopAudio(); render(); }
+    else{ speak(id, S.phase==="ghost" ? "ghost" : "clue"); }
+  }
+
+  else if(act==="gen-run"){ genRun(); }
+
   else if(act==="directions"){
     var L=curLoc();
     window.open("https://www.google.com/maps/dir/?api=1&destination="+L.lat+","+L.lng+"&travelmode=walking","_blank");
   }
+
   else if(act==="checkin"){ doCheckIn(); }
-  else if(act==="manual"){ S.showOverride=false; arrive(); }
+
+  else if(act==="manual"){ S.showOverride=false; arrive(true); }
+
   else if(act==="next"){ nextStop(); }
+
+  else if(act==="copy"){
+    var original=el.innerHTML;
+    copyText(buildSummary(),function(){
+      el.innerHTML="\u2705 Copied to clipboard";
+      setTimeout(function(){ el.innerHTML=original; },2200);
+    });
+  }
+
+  else if(act==="email"){
+    var subj="Shadows of Dublin \u2014 Team "+S.teamNum+" ("+S.teamName+")";
+    window.location.href="mailto:?subject="+encodeURIComponent(subj)+
+                         "&body="+encodeURIComponent(buildSummary());
+  }
+
+  else if(act==="reset"){
+    if(window.confirm("Start over? This erases your team\u2019s progress and resets the timer.")){
+      wipe();
+      window.location.href=window.location.pathname;
+    }
+  }
 });
 
 document.addEventListener("keydown",function(ev){
-  if(ev.key==="Enter" && ev.target && ev.target.id==="guess"){ ev.preventDefault(); submitGuess(); }
+  if(ev.key==="Enter" && ev.target && ev.target.id==="guess"){
+    ev.preventDefault(); submitGuess();
+  }
 });
 
+/* surface the "using device voice" notice through the existing banner */
+var baseRender=render;
+render=function(){
+  if(S.ttsNote && !S.ttsError) S.ttsError=S.ttsNote;
+  baseRender();
+};
+
 /* ============================================================
-   GO
+   BOOT
    ============================================================ */
-render();
+function boot(){
+  /* ?generate  -> one-time narration builder, no saved state touched */
+  if(window.location.search.indexOf("generate")!==-1){
+    document.getElementById("app").innerHTML=viewGenerate();
+    return;
+  }
+  if(window.location.search.indexOf("reset")!==-1){ wipe(); }
+
+  var restored=load();
+  if(restored){
+    S.resumed=true;
+    if(S.screen==="hunt" && S.finalSec===null){
+      if(ticker) clearInterval(ticker);
+      ticker=setInterval(tick,1000);
+    }
+  }
+  render();
+  if(restored && S.screen==="hunt") prefetch();
+}
+
+boot();
 
 })();
 </script>
