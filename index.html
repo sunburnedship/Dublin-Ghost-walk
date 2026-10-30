@@ -6,132 +6,121 @@
 <meta name="theme-color" content="#0a0a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Shadows of Dublin — Ghost Walk</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<title>Shadows of Dublin — A Haunted Walking Scavenger Hunt</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👻</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0a0a0f; --card:#13131d; --border:#2a2a3a;
-  --gold:#c9a84c; --goldDim:#8a7233; --goldBg:rgba(201,168,76,.15);
-  --text:#e8e4d9; --muted:#8a8677;
-  --danger:#e05555; --dangerBg:rgba(224,85,85,.12);
-  --success:#4cc96a;
-  --warn:#c9944c; --warnBg:rgba(201,148,76,.12);
-  --purple:#b090e0; --purpleBg:rgba(100,60,180,.12);
-  --Fd:'Playfair Display',Georgia,serif;
-  --Fb:'Source Serif 4',Palatino,serif;
-  --Fm:'JetBrains Mono',ui-monospace,monospace;
+  --bg:#0a0a0f;--card:#13131d;--border:#2a2a3a;
+  --gold:#c9a84c;--goldDim:#8a7233;--goldBg:rgba(201,168,76,.15);
+  --text:#e8e4d9;--muted:#8a8677;
+  --danger:#e05555;--dangerBg:rgba(224,85,85,.12);
+  --success:#4cc96a;--successBg:rgba(76,201,106,.1);
+  --warn:#c9944c;--warnBg:rgba(201,148,76,.12);
+  --purple:#b090e0;--purpleBg:rgba(100,60,180,.12);
+  --Fd:'Playfair Display',Georgia,serif;--Fb:'Source Serif 4',Palatino,serif;--Fm:'JetBrains Mono',ui-monospace,monospace;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);min-height:100%;-webkit-tap-highlight-color:transparent}
-body{font-family:var(--Fb);color:var(--text);line-height:1.5}
+body{font-family:var(--Fb);color:var(--text);line-height:1.5;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
 button{font-family:inherit;cursor:pointer}
 button:active{transform:scale(.985)}
 input{font-family:inherit}
-
 .wrap{max-width:520px;margin:0 auto;padding:16px 16px 60px;min-height:100vh}
 .center{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
-.centerbox{max-width:390px;width:100%}
-
+.centerbox{max-width:400px;width:100%}
 .splashbg{background:radial-gradient(ellipse at 50% 25%,#1a1a2a,var(--bg) 65%)}
 .donebg{background:radial-gradient(ellipse at 50% 22%,#0e1f0e,var(--bg) 62%);min-height:100vh}
-
-h1.logo{font-family:var(--Fd);font-size:50px;font-weight:900;color:var(--gold);line-height:1.05;margin:6px 0;letter-spacing:-1px}
+h1.logo{font-family:var(--Fd);font-size:50px;font-weight:900;color:var(--gold);line-height:1.05;margin:6px 0;letter-spacing:-1px;text-shadow:0 0 40px rgba(201,168,76,.25)}
 h1.logo em{font-weight:400;font-size:26px;color:var(--muted)}
-.ghosticon{font-size:64px;filter:drop-shadow(0 0 24px rgba(201,168,76,.5))}
+.ghosticon{font-size:64px;filter:drop-shadow(0 0 24px rgba(201,168,76,.5));animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 .shamrock{color:var(--goldDim);font-size:13px;letter-spacing:12px;margin:14px 0}
 .tagline{font-family:var(--Fd);font-size:16px;font-style:italic;margin:6px 0 4px}
 .route{font-family:var(--Fm);font-size:11px;color:var(--muted);margin:0 0 26px}
 .fine{font-size:12px;color:var(--muted);margin-top:18px;line-height:1.7}
-
-.btn{display:block;width:100%;border-radius:8px;padding:13px 20px;font-size:15px;font-weight:700;
-     font-family:var(--Fd);letter-spacing:.5px;transition:all .15s;border:2px solid var(--gold);
-     color:var(--gold);background:transparent}
+.btn{display:block;width:100%;border-radius:8px;padding:13px 20px;font-size:15px;font-weight:700;font-family:var(--Fd);letter-spacing:.5px;transition:all .15s;border:2px solid var(--gold);color:var(--gold);background:transparent}
 .btn:hover{background:var(--gold);color:#000}
 .btn[disabled]{opacity:.45;pointer-events:none}
+.btn.solid{background:var(--gold);color:#000}
 .btn.ghostbtn{border-color:var(--border);color:var(--muted);border-width:1px;font-family:var(--Fb);font-weight:400;font-size:14px}
 .btn.ghostbtn:hover{background:transparent;color:var(--text);border-color:var(--muted)}
 .btn.warnbtn{border-color:rgba(201,148,76,.45);background:var(--warnBg);color:var(--warn);border-width:1px;font-family:var(--Fb);font-weight:400;font-size:14px}
-.btn.warnbtn:hover{background:var(--warnBg);color:var(--warn)}
 .btn.okbtn{background:var(--success);border-color:var(--success);color:#000}
-
 .backlink{background:none;border:none;color:var(--gold);font-family:var(--Fb);font-size:15px;padding:4px 0 12px;display:block}
 .linkbtn{background:none;border:none;padding:0;font-family:var(--Fm);font-size:11px;color:var(--muted);text-decoration:underline}
-
 h2.head{font-family:var(--Fd);font-size:26px;font-weight:700;color:var(--gold);margin:0 0 8px}
-.lede{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 24px}
+.lede{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 20px}
 label.lbl{display:block;font-family:var(--Fd);font-size:13px;font-weight:600;margin:20px 0 8px;letter-spacing:.5px}
-
 .teamgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.teambtn{font-family:var(--Fm);font-size:18px;font-weight:700;color:var(--muted);background:var(--card);
-         border:1px solid var(--border);border-radius:8px;padding:14px 0;transition:all .15s}
+.teambtn{font-family:var(--Fm);font-size:18px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 0;transition:all .15s}
 .teambtn.on{color:var(--gold);background:var(--goldBg);border-color:var(--gold)}
-
-input.txt{width:100%;font-size:16px;color:var(--text);background:var(--card);border:1px solid var(--border);
-          border-radius:8px;padding:12px 16px;outline:none}
+input.txt{width:100%;font-size:16px;color:var(--text);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;outline:none}
 input.txt:focus{border-color:var(--gold)}
-
+.rules{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-top:20px;font-size:13px;line-height:1.7;color:var(--muted)}
+.rules b{color:var(--text)}
+.rules ol{margin:6px 0 0;padding-left:20px}
 .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.hdr .tname{font-family:var(--Fd);font-size:16px;font-weight:700;color:var(--gold);margin:0}
+.hdr .tname{font-family:var(--Fd);font-size:17px;font-weight:700;color:var(--gold);margin:0}
 .hdr .tsub{font-family:var(--Fm);font-size:11px;color:var(--muted);margin:2px 0 0}
 .hdr .tlab{font-family:var(--Fm);font-size:10px;color:var(--muted);margin:0;text-transform:uppercase;letter-spacing:1px}
 .hdr .tval{font-family:var(--Fm);font-size:24px;font-weight:700;margin:0}
 .hdr .pen{font-family:var(--Fm);font-size:10px;color:var(--warn);margin:0}
-
-.resumed{background:rgba(76,201,106,.1);border:1px solid rgba(76,201,106,.3);border-radius:8px;
-         padding:9px 13px;margin-bottom:14px;font-family:var(--Fm);font-size:11px;color:var(--success)}
-
-.bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:22px;overflow:hidden}
+.resumed{background:var(--successBg);border:1px solid rgba(76,201,106,.3);border-radius:8px;padding:9px 13px;margin-bottom:14px;font-family:var(--Fm);font-size:11px;color:var(--success)}
+.bar{height:5px;background:var(--border);border-radius:3px;margin-bottom:8px;overflow:hidden}
 .bar>div{height:100%;background:linear-gradient(90deg,var(--goldDim),var(--gold));transition:width .6s}
-
+.barlab{font-family:var(--Fm);font-size:11px;color:var(--muted);text-align:right;margin:0 0 18px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
 .cardrow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
 .tag{font-family:var(--Fm);font-size:10px;text-transform:uppercase;letter-spacing:2px;display:block}
 .body{font-size:15px;line-height:1.85;margin:0}
-
-.listen{font-family:var(--Fm);font-size:11px;letter-spacing:.5px;border-radius:20px;padding:6px 14px;
-        white-space:nowrap;border:1px solid rgba(201,168,76,.4);background:var(--goldBg);color:var(--gold);transition:all .15s}
+.listen{font-family:var(--Fm);font-size:11px;letter-spacing:.5px;border-radius:20px;padding:6px 14px;white-space:nowrap;border:1px solid rgba(201,168,76,.4);background:var(--goldBg);color:var(--gold)}
 .listen.playing{border-color:rgba(224,85,85,.45);background:var(--dangerBg);color:var(--danger)}
-.listen.loading{border-color:rgba(138,134,119,.35);background:rgba(255,255,255,.04);color:var(--muted);cursor:wait}
-
 .hint{background:var(--warnBg);border:1px solid rgba(201,148,76,.3);border-radius:10px;padding:16px;margin-bottom:12px}
 .hint .tag{color:var(--warn);margin-bottom:8px}
 .hint p{font-size:14px;margin:0;line-height:1.7}
-.reveal{background:rgba(201,148,76,.18);border:1px solid var(--warn);border-radius:10px;padding:16px;margin-bottom:12px;text-align:center}
-.reveal .big{font-family:var(--Fd);font-size:18px;font-weight:700;color:var(--warn);margin:0 0 4px}
-.reveal .sm{font-family:var(--Fm);font-size:12px;color:var(--muted);margin:0}
-
-.wrongbox{background:var(--dangerBg);border:1px solid rgba(224,85,85,.3);border-radius:8px;padding:10px 14px;
-          margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.wrongbox{background:var(--dangerBg);border:1px solid rgba(224,85,85,.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .wrongbox p{color:var(--danger);font-size:13px;margin:0;line-height:1.5}
 .wrongbox span{font-family:var(--Fm);font-size:12px;color:var(--danger);font-weight:700;white-space:nowrap}
-
 .guessrow{display:flex;gap:8px;margin-top:4px}
-.guessrow input{flex:1}
+.guessrow input{flex:1;min-width:0}
 .guessrow button{width:auto;padding:12px 22px;font-size:14px;flex-shrink:0}
 .note{font-size:12px;color:var(--muted);margin:8px 0 0;font-style:italic;text-align:center}
-
-.dest{background:linear-gradient(135deg,rgba(201,168,76,.14),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.35);
-      border-radius:14px;padding:22px 20px;margin-bottom:14px;text-align:center}
+.dest{background:linear-gradient(135deg,rgba(201,168,76,.14),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.35);border-radius:14px;padding:22px 20px;margin-bottom:14px;text-align:center}
+.dest.revealed{background:linear-gradient(135deg,rgba(201,148,76,.18),rgba(201,148,76,.05));border-color:var(--warn)}
 .dest .emoji{font-size:48px;margin-bottom:8px}
-.dest h3{font-family:var(--Fd);font-size:26px;font-weight:700;color:var(--gold);margin:0 0 4px}
+.dest h3{font-family:var(--Fd);font-size:26px;font-weight:700;color:var(--gold);margin:4px 0}
 .dest .sub{font-family:var(--Fm);font-size:12px;color:var(--muted);margin:0}
-
+.dest .pennote{font-family:var(--Fm);font-size:12px;color:var(--warn);margin:8px 0 0}
 .ghostcard{background:var(--purpleBg);border:1px solid rgba(176,144,224,.3);border-radius:12px;padding:20px;margin-bottom:16px}
 .ghostcard .tag{color:var(--purple)}
-
-.errbox{background:var(--dangerBg);border:1px solid rgba(224,85,85,.3);border-radius:8px;padding:10px 14px;
-        margin-bottom:14px;font-size:12px;color:var(--danger);font-family:var(--Fm);line-height:1.5}
+.histcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.histcard .tag{color:var(--goldDim)}
+.tabrow{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tabb{flex:1;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--Fd);font-size:15px;font-weight:600;padding:10px 0}
+.tabb.on{color:var(--gold);border-bottom-color:var(--gold)}
+.player{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px}
+.pbtn{width:42px;height:42px;border-radius:50%;background:var(--gold);border:none;color:#000;font-size:18px;flex-shrink:0}
+.pinfo{flex:1;min-width:0}
+.plab{font-family:var(--Fm);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.pprog{width:100%;height:4px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden}
+.pprog>div{height:100%;background:var(--gold);width:0}
+.ptime{font-family:var(--Fm);font-size:11px;color:var(--muted);flex-shrink:0}
+.arrived{background:var(--successBg);border:1px solid rgba(76,201,106,.35);border-radius:10px;padding:12px;margin-bottom:14px;text-align:center;font-family:var(--Fd);color:var(--success);font-weight:600}
 .gpsmsg{color:var(--danger);font-size:13px;margin:10px 0 2px;line-height:1.5}
 .gpsdist{font-family:var(--Fm);font-size:11px;color:var(--muted);margin:2px 0 0}
 .mini{font-family:var(--Fm);font-size:11px;color:var(--muted);margin:0 0 12px;text-transform:uppercase;letter-spacing:1px}
-
-.finaltime{font-family:var(--Fm);font-size:46px;font-weight:700;margin:0}
-.mt{margin-top:24px}
-.mb{margin-bottom:10px}
-
-/* ---- finish summary ---- */
+.journey{margin-top:26px}
+.jrow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.jrow:last-child{border-bottom:none}
+.jdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--Fm);font-size:12px;font-weight:700;flex-shrink:0;background:var(--border);color:var(--muted)}
+.jrow.done .jdot{background:var(--success);color:#000}
+.jrow.cur .jdot{background:var(--gold);color:#000}
+.jname{flex:1;font-family:var(--Fd);font-size:14px}
+.jrow.locked .jname,.jrow.cur .jname{color:var(--muted);font-style:italic}
+.jt{font-family:var(--Fm);font-size:11px;color:var(--gold)}
+.finaltime{font-family:var(--Fm);font-size:46px;font-weight:700;margin:0;color:var(--gold)}
+.mt{margin-top:24px}.mb{margin-bottom:10px}
 .sumwrap{max-width:520px;margin:0 auto;padding:26px 16px 64px;text-align:center}
 .srow{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);text-align:left}
 .srow:last-child{border-bottom:none}
@@ -140,961 +129,457 @@ input.txt:focus{border-color:var(--gold)}
 .sp b{display:block;font-family:var(--Fd);font-size:14px;font-weight:600;color:var(--text)}
 .sp span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 .st{font-family:var(--Fm);font-size:12px;color:var(--gold);flex-shrink:0;padding-top:4px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.stat{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:11px 8px}
-.stat b{display:block;font-family:var(--Fm);font-size:20px;color:var(--gold)}
-.stat span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
 .split{display:flex;justify-content:space-around;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
 .split div{font-family:var(--Fm);font-size:11px;color:var(--muted)}
 .split b{display:block;font-size:15px;color:var(--text);margin-top:3px}
-.seclab{font-family:var(--Fm);font-size:10px;text-transform:uppercase;letter-spacing:2px;
-        color:var(--muted);text-align:left;margin:26px 0 8px}
+.seclab{font-family:var(--Fm);font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);text-align:left;margin:26px 0 8px}
 </style>
 </head>
 <body>
 <div id="app"></div>
-
 <script>
 (function(){
 "use strict";
 
 /* ============================================================
-   CONFIG
+   SETTINGS — change these to tune the game
    ============================================================ */
-/* Narration is served as pre-made MP3s from the /audio folder.
-   Nothing is generated at runtime, so there is no API quota to
-   exhaust and no key in this file.  To create the MP3s, open
-   this page once with ?generate on the end of the URL.        */
-var AUDIO_DIR   = "audio/";
-var EL_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";        // "Daniel" — deep British male
-var GPS_RADIUS  = 50;                             // metres allowed for check-in
+var CHECK_IN_RADIUS_M = 7.62;   // ~25 ft
+var GPS_SLACK_MAX_M   = 10;     // phone GPS is rarely better than 5–10 m; up to this much of the reported accuracy is forgiven
+var PENALTY_WRONG_1   = 180;    // seconds added after the 1st wrong guess (then a hint is shown)
+var PENALTY_WRONG_2   = 600;    // seconds added after the 2nd wrong guess (then the location is revealed)
+var MANUAL_AFTER_TRIES= 2;      // failed GPS attempts before the manual check-in button appears
+var SAVE_KEY          = "shadows_of_dublin_hunt_v2";
 
 /* ============================================================
-   LOCATIONS  (18 possible stops + fixed start & finish)
+   LOCATIONS — names, coordinates, history and ghost stories
    ============================================================ */
-var LOCS = {
-start:{name:"St. Stephen's Green",emoji:"\u{1F33F}",lat:53.33815,lng:-6.25914,
-clue:"One of Dublin's most cherished public spaces has been open to the public since 1664 \u2014 though its history is far from serene. Originally used for public hangings and floggings, it was redesigned in 1880 by a member of Dublin's most famous brewing dynasty. During the 1916 Easter Rising, rebel forces dug trenches here and exchanged fire with British soldiers on the rooftops of a grand hotel overlooking the grounds. Bullet holes can still be found in the surrounding buildings.",
-ghost:"On foggy evenings, visitors have reported hearing the phantom crack of a hangman's rope near the northwest corner, where public executions took place for over a century. The most persistent sighting is of a woman in grey who walks the perimeter path after midnight, believed to be the shade of a young woman executed in 1798 for aiding rebel forces. Groundskeepers have reported finding flower beds near the Wolfe Tone memorial disturbed in the mornings, with no footprints leading in or out.",
-answers:["st stephens green","stephens green","stephen green","st stephen green","st stephens"],
-hint1:"This beautiful 9-hectare park sits right in the heart of Dublin city centre, at the top of one of Dublin's most famous pedestrian shopping streets.",
-hint2:"It sits at the top of Grafton Street. During the 1916 Rising, Countess Constance Markievicz commanded rebel forces inside its iron gates."},
+const LOCATIONS={start:{id:"start",name:"St. Stephen's Green",lat:53.33815,lng:-6.25914,emoji:"🌿",history:"St. Stephen's Green has been a public park since 1664, making it one of Dublin's oldest. Originally a marshy common used for public hangings and floggings, the Green was enclosed in 1814 and redesigned by Sir Arthur Guinness in 1880. During the 1916 Easter Rising, rebel forces under Michael Mallin and Constance Markievicz dug trenches here and exchanged fire with British soldiers stationed on the rooftops of the Shelbourne Hotel. Bullet holes can still be found in buildings surrounding the park.",ghost:"On foggy evenings, visitors to the Green have reported hearing the phantom crack of a hangman's rope near the northwest corner — where public executions took place for over a century. The most persistent sighting is of a woman in grey who walks the perimeter path after midnight, believed to be the shade of a young woman executed in 1798 for aiding rebel forces. Groundskeepers have reported finding the flower beds near the Wolfe Tone memorial disturbed in the mornings, with no footprints leading in or out — as if something had risen from the earth itself."},end:{id:"end",name:"Trinity College Dublin",lat:53.34384,lng:-6.25460,emoji:"📚",history:"Founded in 1592 by Queen Elizabeth I, Trinity College is Ireland's oldest university. Its iconic Long Room library holds over 200,000 of its oldest books, including the legendary Book of Kells — a masterwork of medieval art created by Celtic monks around 800 AD. Notable alumni include Oscar Wilde, Samuel Beckett, Jonathan Swift, and Bram Stoker, who studied here before writing Dracula. The campus's oldest surviving building, The Rubrics, dates from around 1700.",ghost:"Bram Stoker walked these cobblestones before penning the most famous horror novel ever written — and some say he drew early inspiration from the campus itself. The ghost of Edward Ford, a lecturer who died in the 1700s, is said to haunt The Rubrics wearing a powdered wig, academic gown, and knee breeches. Students have reported seeing his pale figure gliding between rooms on the upper floors. In the Long Room, night security guards have heard the unmistakable sound of pages turning when no one else is present — as if some scholarly spirit cannot rest until they finish their reading."},loc_a:{id:"loc_a",name:"St. Ann's Church",subtitle:"Dawson Street",lat:53.34095,lng:-6.25730,emoji:"⛪",history:"Built in 1720, St. Ann's Church on Dawson Street is one of Dublin's most historic parish churches. Its striking Romanesque façade was added in 1868. The church has a long tradition of charity — a bread shelf, endowed in 1723, still provides bread to the poor of the parish to this day. Famous parishioners have included Wolfe Tone, Bram Stoker (who was married here in 1878), and Douglas Hyde, the first President of Ireland.",ghost:"It was in this very church that Bram Stoker married Florence Balcombe in 1878 — the same woman Oscar Wilde had once courted. Some say Wilde's jealous spirit has never forgiven the slight. Late-night passersby have heard the faint strains of organ music drifting from the locked church, though no organist is present. A verger in the 1960s reported seeing a tall figure in a velvet coat standing in the gallery, watching the empty pews below with an expression of profound sadness. When he called out, the figure vanished — leaving only the lingering scent of lilies."},loc_b:{id:"loc_b",name:"Powerscourt Townhouse",subtitle:"South William Street",lat:53.34190,lng:-6.26240,emoji:"🏛️",history:"This magnificent Georgian townhouse was built in 1774 for Richard Wingfield, 3rd Viscount Powerscourt. Designed by Robert Mack, it features one of the finest Georgian interiors in Dublin, with elaborate plasterwork by Michael Stapleton. The grand mahogany staircase and ornate reception rooms once hosted lavish balls for Dublin's aristocracy. Converted to a shopping centre in 1981, the building retains its aristocratic grandeur beneath the modern retail.",ghost:"The ghost of a serving girl has been seen on the grand staircase, always climbing, never arriving. According to legend, she was a maid in the Powerscourt household who fell to her death from the upper gallery during a grand ball in the 1790s — some whisper she was pushed by a jealous rival. Shopkeepers on the upper floors report items rearranging themselves overnight and the sound of rustling fabric in empty corridors. One night watchman refused to return after hearing a woman's voice whispering \"help me\" from the empty stairwell at 3 AM."},loc_c:{id:"loc_c",name:"Dublin Castle",subtitle:"Dame Street",lat:53.34320,lng:-6.26740,emoji:"🏰",history:"Dublin Castle has been at the heart of Irish history since the Anglo-Normans built a fortress here in the early 1200s. For over 700 years it served as the seat of British rule in Ireland. The castle complex includes the State Apartments, the Chapel Royal with its stunning Gothic exterior, and the medieval Undercroft — the original Viking foundations upon which the castle was built. It was here in 1922 that Michael Collins formally accepted the handover of power from the British.",ghost:"The \"Lady in Red\" is Dublin Castle's most famous phantom — believed to be a noblewoman imprisoned and executed within these walls during the 16th century. Her spectral figure, draped in a flowing crimson gown, has been spotted drifting through the State Apartments after dark. Guards have reported the sound of phantom footsteps echoing through empty corridors and doors slamming shut on windless nights. In the medieval Undercroft, where Viking Dublin lies buried, archaeologists have reported an oppressive feeling of being watched — and one team photographed a shadowy figure standing in a doorway where no person stood."},loc_d:{id:"loc_d",name:"City Hall",subtitle:"Dame Street",lat:53.34395,lng:-6.26690,emoji:"🏛️",history:"Designed by Thomas Cooley and completed in 1779, City Hall was originally the Royal Exchange — Dublin's commercial trading centre. Its spectacular rotunda, supported by twelve columns, features a beautiful mosaic floor depicting the Dublin coat of arms. During the 1916 Easter Rising, the building was occupied by rebel forces and came under heavy fire from nearby Dublin Castle. Bullet marks can still be seen on the columns. It has served as Dublin's City Hall since 1852.",ghost:"During the 1916 Rising, fierce fighting raged inside this building. A young rebel named Seán Connolly was the first insurgent to die in the rebellion, shot by a sniper while raising a flag on the roof. His ghost, in rebel uniform, has been reported pacing the rotunda late at night. Cleaning staff have described hearing the echo of gunfire that abruptly stops, followed by an eerie silence. One security guard reported that every night at precisely 12:05 — the approximate time Connolly fell — the temperature in the rotunda drops sharply, regardless of season."},loc_e:{id:"loc_e",name:"Temple Bar",subtitle:"Crown Alley",lat:53.34540,lng:-6.26420,emoji:"🍺",history:"Temple Bar takes its name not from any drinking establishment but from the Temple family — Sir William Temple was Provost of Trinity College and owned land here in the 1600s. \"Bar\" referred to a riverside walkway. The cobblestoned quarter nearly became a bus terminal in the 1980s before an arts campaign saved it. Today it's Dublin's cultural quarter, home to galleries, theatres, vintage shops, and of course, some of the city's most famous pubs. The area sits atop medieval Dublin and Viking trading routes.",ghost:"Beneath the cobblestones of Temple Bar lie the bones of medieval Dublin. The most chilling tale belongs to Darkey Kelly, a brothel owner in nearby Copper Alley during the 1700s. She accused a powerful city official of fathering her child — and in revenge, he had her convicted of witchcraft and burned at the stake. Her agonized screams reportedly echoed through these streets for years afterward. Even today, people in the narrow lanes around Crown Alley have reported smelling burning on perfectly clear evenings, and a dark-haired woman has been seen standing in doorways, watching passersby with hollow eyes before dissolving into shadow."},loc_f:{id:"loc_f",name:"Olympia Theatre",subtitle:"Dame Street",lat:53.34440,lng:-6.26530,emoji:"🎭",history:"The Olympia Theatre, originally \"Dan Lowrey's Star of Erin Music Hall,\" opened in 1879. It is one of Dublin's oldest and most beloved performance venues. Its ornate Victorian interior has hosted everyone from Charlie Chaplin and Laurel & Hardy to David Bowie and Radiohead. The distinctive canopy entrance on Dame Street is one of the most recognisable facades in the city.",ghost:"Backstage at the Olympia, performers speak in hushed tones about \"the man in the balcony.\" He appears in the upper gallery during rehearsals — a gaunt figure in Victorian dress, watching the stage intently. When actors look directly at him, he fades from view. Some believe he is the ghost of Dan Lowrey himself, the theatre's original owner, who died backstage in 1897 and whose devotion to his theatre apparently survived death. Stagehands have reported props moving on their own, lights flickering in sequence as if operated by unseen hands, and on one occasion, the distinct sound of a single person applauding from an empty auditorium."},loc_g:{id:"loc_g",name:"George's Street Arcade",subtitle:"South Great George's St",lat:53.34250,lng:-6.26380,emoji:"🏪",history:"Opened in 1881 as the South City Markets, George's Street Arcade is Dublin's oldest red-brick Victorian market. Designed by Lockwood & Mawson, it features a stunning glass-roofed interior. The market was gutted by fire in 1892 but rebuilt to an even grander design. Today it houses an eclectic mix of vintage clothing stalls, record shops, jewellers, fortune tellers, and food vendors.",ghost:"The Arcade was built on the site of an old burial ground, and during construction in 1881, workers uncovered dozens of unmarked graves — victims of various plagues that swept through the Liberties. After the great fire of 1892, people reported seeing figures in the smoke-blackened ruins before rebuilding began. Today, stallholders who arrive early in the morning report hearing footsteps on the upper gallery when no one else has arrived, and a woman in a long dark dress has been spotted browsing the stalls just before closing — only to vanish when approached."},loc_h:{id:"loc_h",name:"Molly Malone Statue",subtitle:"Suffolk Street",lat:53.34361,lng:-6.26100,emoji:"🐚",history:"The bronze statue of Molly Malone — \"The Tart with the Cart\" as Dubliners affectionately call her — was unveiled in 1988 for Dublin's millennium celebration. She commemorates the legendary fishmonger from the famous Irish folk song. Whether Molly was a real person remains debated, but parish records from 1699 show a Mary Malone who died and was buried in St. John's Church graveyard. The statue was moved to Suffolk Street in 2014.",ghost:"They say Molly Malone died of a fever — but some Dubliners insist she never truly left these streets. Late at night, around the old market district, people have heard the unmistakable creak of a wooden cart wheel on cobblestones. A few have reported seeing a young woman in 17th-century dress pushing a barrow through the mist near Suffolk Street, only for her to dissolve when the fog lifts. The most unnerving accounts come from taxi drivers who've reported picking up a young woman near the statue in the early hours — she asks to go to St. John's churchyard, but when they arrive at the destination, the back seat is empty."},loc_i:{id:"loc_i",name:"Bank of Ireland",subtitle:"College Green",lat:53.34430,lng:-6.25940,emoji:"🏦",history:"This magnificent building on College Green was originally the Irish Houses of Parliament, built between 1729 and 1739 — the world's first purpose-built bicameral parliament. After the Act of Union in 1800 abolished the Irish Parliament, the building was sold to the Bank of Ireland, which has occupied it since 1803.",ghost:"In the old House of Lords chamber, bank employees working late have reported the sound of heated debate echoing from the empty room — ghostly parliamentarians arguing points of law two centuries after their institution was abolished. The most famous apparition is that of Henry Grattan, the great orator who fought passionately against the Act of Union. His ghost, in full parliamentary dress, has been seen standing at the entrance on College Green, as if arriving for a session that will never begin."},loc_j:{id:"loc_j",name:"Christ Church Cathedral",subtitle:"Christchurch Place",lat:53.34340,lng:-6.27130,emoji:"⛪",history:"Christ Church Cathedral is Dublin's oldest medieval building, founded around 1030 by the Norse King Sitric Silkenbeard. It was rebuilt in stone by the Norman knight Strongbow in the 1170s. The cathedral's famous crypt — the largest in Ireland — stretches the entire length of the building and contains artifacts spanning a thousand years, including the famous mummified cat and rat found trapped in an organ pipe.",ghost:"The crypt of Christ Church has been a place of dread for nearly a millennium. The most persistent ghost is that of Strongbow himself — the Norman conqueror whose armored shade has been seen kneeling at his tomb in the dead of night. But the cathedral's most disturbing haunting involves the mummified cat and rat, found entombed together in an organ pipe centuries ago. Visitors report hearing an unearthly yowling from the crypt, and on certain nights, a scratching sound issues from behind the stone walls — as if something long dead is still trying to claw its way out."},loc_k:{id:"loc_k",name:"The Brazen Head",subtitle:"20 Lower Bridge Street",lat:53.34470,lng:-6.27600,emoji:"🍻",history:"The Brazen Head claims the title of Ireland's oldest pub, with records dating its establishment to 1198. Its low ceilings, creaking floorboards, and labyrinthine rooms have welcomed eight centuries of Dublin's citizens. Most famously, the revolutionary Robert Emmet used The Brazen Head as a meeting place to plan his ill-fated 1803 rebellion against British rule. Emmet was captured, hanged, and beheaded on nearby Thomas Street.",ghost:"The spirit of Robert Emmet has never left his favourite pub. Drinkers at the bar have reported glimpsing a young man in early 19th-century dress sitting alone in a corner booth, only to find the seat empty when they look again. More unsettling, Emmet's executioner is also said to haunt The Brazen Head — meaning both hunter and hunted share the same afterlife drinking hole. Staff closing up at night have heard whispered arguments from empty rooms, glasses sliding across tables untouched, and one barman swore he felt an icy hand grip his shoulder as he locked the door at 2 AM."},loc_l:{id:"loc_l",name:"St. Audoen's Church",subtitle:"High Street",lat:53.34350,lng:-6.27470,emoji:"🕍",history:"St. Audoen's is Dublin's oldest surviving medieval parish church, dating to around 1190. Named after St. Ouen of Rouen, it stands near the last remaining gate of the medieval city walls. The church contains the \"Lucky Stone,\" an early Celtic gravestone that Dubliners have touched for luck for centuries. The adjoining tower holds three bells cast in 1423, making them among the oldest in Ireland.",ghost:"St. Audoen's steps, known locally as \"Hell,\" have been considered one of Dublin's most haunted spots for centuries. The ghost of Darkey Kelly — the woman burned as a witch in the 1700s — is said to roam these steps at night, her charred figure appearing at the top before descending into the darkness below. Visitors have reported feeling an invisible force pushing them on the stairs. One tour guide reported that his torch died every single time he reached the same step — the thirteenth from the bottom."},loc_m:{id:"loc_m",name:"The Shelbourne Hotel",subtitle:"27 St. Stephen's Green",lat:53.33920,lng:-6.25480,emoji:"🏨",history:"The Shelbourne Hotel has been the grandest address on St. Stephen's Green since 1824. During the 1916 Easter Rising, British soldiers commandeered the hotel and set up a machine gun nest on the roof to fire upon rebel positions in the Green below. The Irish Constitution was drafted in Room 112 in 1922.",ghost:"Room 526 is the most requested — and most feared — room in The Shelbourne. Guests have reported being woken by the apparition of a small girl in Victorian dress, standing silently at the foot of the bed. She is believed to be Mary Masters, a seven-year-old who died of cholera during an 1870s epidemic. Mary's ghost has been seen skipping down the fifth-floor corridor and heard giggling in empty rooms. Staff have also reported the spectre of a woman in Edwardian dress who appears in the Horseshoe Bar just before closing — always sitting at the same stool, always vanishing when the lights go up."},loc_n:{id:"loc_n",name:"Marsh's Library",subtitle:"St. Patrick's Close",lat:53.33940,lng:-6.27170,emoji:"📖",history:"Marsh's Library is Ireland's oldest public library, built in 1701 by Archbishop Narcissus Marsh. Its dark oak bookcases still contain the original wire cages where readers were locked in with rare books to prevent theft. The library holds over 25,000 volumes, some dating to the 15th century. Jonathan Swift — author of Gulliver's Travels — was a frequent visitor.",ghost:"Archbishop Marsh himself is the library's resident ghost. The story goes that his beloved niece eloped against his wishes, and the heartbroken Marsh spent his remaining years searching through the library's books for a letter she supposedly left explaining her departure. He never found it. His ghost has been seen at night, pulling books from the shelves one by one, desperately leafing through the pages before casting them aside. Librarians have arrived in the morning to find books scattered across the reading tables. The wire reading cages sometimes swing shut on their own with a metallic clang."},loc_o:{id:"loc_o",name:"Oscar Wilde Statue",subtitle:"Merrion Square",lat:53.33930,lng:-6.24870,emoji:"🎩",history:"The flamboyant reclining statue of Oscar Wilde sits on a boulder of quartz, jade, and thulite at the northwest corner of Merrion Square — directly across from Number 1, where Wilde grew up. Created by sculptor Danny Osborne in 1997, the statue depicts Wilde in his signature lounging pose with a knowing smirk.",ghost:"Oscar Wilde declared that death is the most boring experience in life. Perhaps that is why his spirit seems reluctant to leave Dublin. Residents of Merrion Square have reported seeing a tall, languid figure leaning against the park railings on moonlit evenings, dressed in an immaculate frock coat. A couple walking past late one October night reported hearing a voice say, quite clearly, \"We are all in the gutter, but some of us are looking at the stars.\" When they turned, there was no one nearby — only the bronze Wilde, grinning in the dark."}};
 
-loc_a:{name:"St. Ann's Church",subtitle:"Dawson Street",emoji:"\u26EA",lat:53.34095,lng:-6.25730,
-clue:"Built in 1720 on one of Dublin's most elegant Georgian streets, this parish church has been a centre of city life for three centuries. It maintains a remarkable tradition: a bread shelf endowed in 1723 still provides food to the poor of the parish to this day. In September 1878, the author of the world's most famous vampire novel walked through its doors, not to research his work, but to get married.",
-ghost:"It was in this very church that Bram Stoker married Florence Balcombe in 1878, the same woman Oscar Wilde had once courted. Some say Wilde's jealous spirit has never forgiven the slight. Late-night passersby have heard faint organ music drifting from the locked church, though no organist is present. A verger in the 1960s reported seeing a tall figure in a velvet coat standing in the gallery, watching the empty pews below with profound sadness. When he called out, the figure vanished, leaving only the scent of lilies.",
-answers:["st anns","st ann","st anns church","anns church","dawson street church"],
-hint1:"This church sits on Dawson Street, running parallel to and east of Grafton Street, between St. Stephen's Green and Trinity College.",
-hint2:"It's where Bram Stoker was married. Look for the striking Romanesque facade added in 1868 \u2014 one of the street's most recognisable buildings."},
-
-loc_b:{name:"Powerscourt Townhouse",subtitle:"South William Street",emoji:"\u{1F3DB}\uFE0F",lat:53.34190,lng:-6.26240,
-clue:"This magnificent Georgian townhouse was built in 1774 for a Viscount whose family seat is one of Ireland's most famous estates in the Wicklow Mountains. Designed by Robert Mack, its elaborate plasterwork and grand mahogany staircase once hosted lavish aristocratic balls. Converted into a shopping centre in 1981, the building retains its extraordinary Georgian grandeur, tucked away on a street running parallel to Grafton Street.",
-ghost:"The ghost of a serving girl has been seen on the grand staircase, always climbing, never arriving. She was a maid who fell to her death from the upper gallery during a ball in the 1790s. Some whisper she was pushed by a jealous rival. Shopkeepers on the upper floors report items rearranging themselves overnight and the sound of rustling fabric in empty corridors. One night watchman refused to return after hearing a woman's voice whispering for help from the empty stairwell at three in the morning.",
-answers:["powerscourt","powerscourt townhouse","powerscourt centre","powerscourt center","powerscourt shopping"],
-hint1:"This 18th-century townhouse is now a shopping centre on South William Street, between Grafton Street and South Great George's Street.",
-hint2:"The family name is associated with a famous waterfall and estate in County Wicklow."},
-
-loc_c:{name:"Dublin Castle",subtitle:"Dame Street",emoji:"\u{1F3F0}",lat:53.34320,lng:-6.26740,
-clue:"For over 700 years, this fortress complex stood as the seat of British rule in Ireland. Built by the Anglo-Normans in the early 1200s, it houses State Apartments, a Gothic chapel, and a medieval undercroft constructed directly on top of Viking foundations. It was here in January 1922 that one of Ireland's most iconic revolutionary figures formally accepted the handover of power from the British.",
-ghost:"The Lady in Red is this location's most famous phantom, believed to be a noblewoman imprisoned and executed here during the 16th century. Her spectral figure, draped in crimson, drifts through the State Apartments after dark. Guards have reported phantom footsteps in empty corridors and doors slamming on windless nights. In the medieval Undercroft, where Viking Dublin lies buried beneath your feet, one archaeological team photographed a shadowy figure standing in a doorway where no person stood.",
-answers:["dublin castle","the castle","castle"],
-hint1:"This medieval fortress sits on Dame Street, directly adjacent to City Hall. It was the headquarters of British administration in Ireland for nearly 700 years.",
-hint2:"There's a large cobbled courtyard, a round tower from the 1200s, and guided tours daily. It's simply named after the city it sits in."},
-
-loc_d:{name:"City Hall",subtitle:"Dame Street",emoji:"\u{1F3DB}\uFE0F",lat:53.34395,lng:-6.26690,
-clue:"Originally built as a commercial trading exchange in 1779, this magnificent domed building on Dame Street features twelve imposing columns and a stunning mosaic floor depicting Dublin's coat of arms. During the 1916 Easter Rising, rebel forces occupied the building. The first insurgent to die in the entire rebellion was shot by a sniper while defiantly raising a flag on its roof.",
-ghost:"In 1916, fierce fighting raged inside these walls, and a young actor named Sean Connolly became the first rebel to fall. His ghost, in rebel uniform, has been reported pacing the rotunda late at night. Cleaning staff describe hearing echoes of gunfire that abruptly stop, followed by eerie silence. One security guard reported that every night at precisely five past midnight, the temperature in the rotunda drops sharply.",
-answers:["city hall","dublin city hall","royal exchange"],
-hint1:"This domed building sits directly across from Dublin Castle, at the top of Dame Street where it meets Lord Edward Street.",
-hint2:"It has served as Dublin's civic administration centre since 1852. The circular rotunda beneath its dome is one of the most impressive free-to-enter interiors in the city."},
-
-loc_e:{name:"Temple Bar",subtitle:"Crown Alley",emoji:"\u{1F37A}",lat:53.34540,lng:-6.26420,
-clue:"This cobblestoned cultural quarter's name has nothing to do with drinking establishments. It was named after Sir William Temple, a 17th-century landowner and Provost of Trinity College, and the word Bar referred to a riverside walkway. Nearly demolished to make way for a bus terminal in the 1980s, it was saved by an arts campaign and is now Dublin's cultural quarter.",
-ghost:"Beneath the cobblestones lie the bones of medieval Dublin. The most chilling tale belongs to Darkey Kelly, a woman in nearby Copper Alley during the 1700s who accused a powerful city official of wrongdoing. In revenge, he had her convicted of witchcraft and burned at the stake. Even today, people in these narrow lanes have reported smelling burning on perfectly clear evenings, and a dark-haired woman has been seen standing in doorways before dissolving into shadow.",
-answers:["temple bar","temple bar dublin"],
-hint1:"It's Dublin's most famous cultural quarter, a cobblestoned area south of the River Liffey, bounded by Dame Street to the south, known worldwide for its nightlife.",
-hint2:"Bordered by Dame Street to the south and the River Liffey to the north, its main street gives its name to a well-known bank."},
-
-loc_f:{name:"Olympia Theatre",subtitle:"Dame Street",emoji:"\u{1F3AD}",lat:53.34440,lng:-6.26530,
-clue:"Originally called Dan Lowrey's Star of Erin Music Hall when it opened in 1879, this performance venue is one of Dublin's oldest and most beloved theatres. Its ornate Victorian interior has hosted Charlie Chaplin, Laurel and Hardy, David Bowie, and Radiohead. The founder died backstage in 1897, and according to theatre legend, his devotion to his creation was so absolute that he never truly departed.",
-ghost:"Backstage, performers speak in hushed tones about the man in the balcony, a gaunt figure in Victorian dress who appears during rehearsals, watching the stage intently, fading when approached. Some believe he is the ghost of the theatre's original owner, who died backstage and refuses to leave. On one occasion, a night security guard heard the distinct sound of a single person applauding from a completely empty auditorium.",
-answers:["olympia","olympia theatre","olympia theater","the olympia"],
-hint1:"This Victorian theatre is on Dame Street. Look for the distinctive iron-and-glass canopy extending over the pavement.",
-hint2:"It's named after Mount Olympus, home of the Greek gods. Its facade is blue and gold, on Dame Street between Dublin Castle and the Central Bank."},
-
-loc_g:{name:"George's Street Arcade",subtitle:"South Great George's Street",emoji:"\u{1F3EA}",lat:53.34250,lng:-6.26380,
-clue:"Opened in 1881, this is Dublin's oldest surviving indoor shopping arcade, a stunning Victorian structure of red brick and terracotta with a glass-vaulted roof. Gutted by fire in 1892, it was rebuilt even grander than before. Today its eclectic stalls include vintage clothing, record shops, jewellers, and fortune tellers. During construction in 1881, workers uncovered dozens of unmarked graves beneath the foundations.",
-ghost:"The arcade was built on an old burial ground, and after the fire of 1892, people reported seeing figures moving in the smoke-blackened ruins. Today, stallholders who arrive early report hearing footsteps on the upper gallery when no one else has arrived. A woman in a long dark dress has been spotted browsing the stalls just before closing, only to vanish when approached. The fortune tellers who work here refuse to do readings after dark.",
-answers:["georges street arcade","george street arcade","georges arcade","georges st arcade","south great georges street arcade"],
-hint1:"This Victorian-era indoor market sits on South Great George's Street, running parallel to and west of Grafton Street.",
-hint2:"It's a red-brick arcade with a glass roof \u2014 vintage shops, record stalls, and a famous fortune teller inside."},
-
-loc_h:{name:"Molly Malone Statue",subtitle:"Suffolk Street",emoji:"\u{1F41A}",lat:53.34361,lng:-6.26100,
-clue:"She wheeled her barrow through streets broad and narrow, crying cockles and mussels, alive alive oh. Whether she was a real person remains debated, though parish records from 1699 mention a Mary Malone who died young of a fever and was buried nearby. A bronze memorial to this iconic figure was unveiled in 1988 for Dublin's millennium celebration, and Dubliners nicknamed her the Tart with the Cart.",
-ghost:"Late at night, around the old market district, people have heard the unmistakable creak of wooden cart wheels on cobblestones. A young woman in 17th-century dress has been reported pushing a barrow through the mist near Suffolk Street, only to dissolve when the fog lifts. Taxi drivers have reportedly picked up a young woman near the statue in the early hours. She asks to be taken to a churchyard, but when they arrive, the back seat is empty.",
-answers:["molly malone","molly malone statue","tart with the cart","suffolk street statue","molly"],
-hint1:"This famous bronze statue stands at the foot of Grafton Street, near the junction with Nassau Street and Suffolk Street.",
-hint2:"One of Dublin's most photographed landmarks \u2014 a fishmonger with a cart overflowing with shellfish, on Suffolk Street."},
-
-loc_i:{name:"Bank of Ireland",subtitle:"College Green",emoji:"\u{1F3E6}",lat:53.34430,lng:-6.25940,
-clue:"The imposing building at College Green was originally the world's first purpose-built bicameral parliament, constructed between 1729 and 1739. After the Act of Union in 1800 abolished the Irish Parliament, the building was sold and has been occupied by a financial institution ever since. The original House of Lords chamber survives intact with 18th-century tapestries, an Irish crystal chandelier, and a silver-gilt mace.",
-ghost:"In the old House of Lords chamber, employees working late have reported the sound of heated debate echoing from the empty room, ghostly parliamentarians arguing points of law long after their institution was abolished. The most famous apparition is Henry Grattan, the great orator who fought passionately against the Act of Union. His ghost, in full parliamentary dress, has been seen standing at the entrance on College Green.",
-answers:["bank of ireland","college green","bank of ireland college green"],
-hint1:"This building stands at College Green, directly opposite the main entrance gates to Trinity College Dublin.",
-hint2:"Originally a parliament building. It's now one of Ireland's oldest and largest banks."},
-
-loc_j:{name:"Christ Church Cathedral",subtitle:"Christchurch Place",emoji:"\u26EA",lat:53.34340,lng:-6.27130,
-clue:"Founded around 1030 by the Norse King Sitric Silkenbeard, this is Dublin's oldest medieval building, predating even the Norman conquest of the city. It was rebuilt in stone by the Norman knight Strongbow in the 1170s after he seized Dublin. Its famous crypt, the largest in Ireland, stretches the entire length of the building. The Norman conqueror himself lies buried in the nave.",
-ghost:"The crypt has been a place of dread for nearly a millennium. The most persistent ghost is Strongbow himself, whose armored shade has been seen kneeling at his tomb in the dead of night. The cathedral's most disturbing haunting involves a mummified cat and rat found trapped together inside an organ pipe, still on display in a glass case. Visitors report hearing unearthly yowling from the crypt, and on certain nights, a scratching from behind the stone walls.",
-answers:["christ church","christ church cathedral","christchurch","christchurch cathedral","christ church dublin"],
-hint1:"This medieval cathedral stands on a hill at Christchurch Place, connected by a covered stone bridge to the Dublinia museum next door.",
-hint2:"Founded by a Viking king. You can hear its bells from some distance away."},
-
-loc_k:{name:"St. Audoen's Church",subtitle:"High Street",emoji:"\u26EA",lat:53.34333,lng:-6.27556,
-clue:"Dublin's oldest surviving parish church, dating from 1190, stands on a rise above the River Liffey in what was once the heart of medieval Dublin. Named after the patron saint of Normandy, it houses the famous Lucky Stone, a slab that has stood here since the 1300s and was long believed to bring good fortune to those who touched it. The adjoining park contains preserved sections of the original medieval city wall.",
-ghost:"The Green Lady haunts the stone steps that descend from the church toward the river. According to legend, she was a young woman murdered on her wedding day when her lover was cut down by jealous rivals. She now wanders the steps on stormy nights, dressed in a long green gown that seems to shimmer with rain that isn't there. Visitors have reported hearing muffled sobbing at dusk, and one caretaker in the 1970s swore he saw a young woman in period dress walk right through the locked west door.",
-answers:["st audoens","st audoen","saint audoens","audoens church","st audoens church"],
-hint1:"This ancient church stands on High Street, just west of Christ Church Cathedral, with famous stone steps descending toward the river.",
-hint2:"Named after the Norman patron saint. Look for the Lucky Stone outside and the surviving medieval city wall in the park next door."},
-
-loc_l:{name:"The Brazen Head",subtitle:"Bridge Street Lower",emoji:"\u{1F37B}",lat:53.34537,lng:-6.27653,
-clue:"This warren of low-beamed rooms and stone-flagged floors has served travellers since 1198, making it Ireland's oldest pub. Tucked in a lane just south of the River Liffey, it was the favoured meeting place of Irish revolutionaries. Wolfe Tone plotted here, Robert Emmet drank here before his 1803 rebellion, and Michael Collins used its snugs for secret meetings during the War of Independence.",
-ghost:"The pub is said to be haunted by Robert Emmet himself, hanged in 1803 for treason. Staff and patrons have reported seeing a young man in early 19th-century dress sitting at a corner table in the back room, only to vanish when approached. Cellar workers refuse to descend alone after reports of unexplained cold spots and muffled voices from behind sealed walls that once concealed hiding places for Emmet and his rebels. On quiet winter evenings, some have heard soft weeping from the empty upstairs rooms.",
-answers:["brazen head","the brazen head","brazen"],
-hint1:"This ancient pub sits on Bridge Street Lower, just south of the River Liffey and west of Christ Church Cathedral.",
-hint2:"Its name comes from an old inn sign \u2014 a woman with a brazen, or brass-coloured, head. Often listed as Ireland's oldest pub, dating to 1198."},
-
-loc_m:{name:"Marsh's Library",subtitle:"St. Patrick's Close",emoji:"\u{1F4D6}",lat:53.33876,lng:-6.27124,
-clue:"Founded in 1707 by Archbishop Narcissus Marsh, this is Ireland's oldest public library and one of the few 18th-century buildings in Dublin still used for its original purpose. Its dark oak bookcases hold over 25,000 rare books, and to this day readers are still locked into caged alcoves to prevent theft of the precious volumes. Bram Stoker, James Joyce, and Jonathan Swift all studied here beneath the same wooden gallery.",
-ghost:"The library is haunted by its founder. In life, the Archbishop had a beloved niece who eloped with a sea captain, leaving behind a letter of explanation hidden inside one of the library's thousands of books. He never found it. Since his death in 1713, his ghost has been seen after hours pulling volumes from the shelves and turning their pages in the dim light before dawn, endlessly seeking the letter she left him three centuries ago. Books are sometimes found reshelved in the wrong places.",
-answers:["marsh library","marshs library","archbishop marsh","archbishop marshs library","marshs"],
-hint1:"This 18th-century library stands right next to St. Patrick's Cathedral, on St. Patrick's Close.",
-hint2:"Ireland's oldest public library, named after the Archbishop who founded it in 1707. Ask about the cages \u2014 reading alcoves where scholars were locked in with rare books."},
-
-loc_n:{name:"St. Patrick's Cathedral",subtitle:"St. Patrick's Close",emoji:"\u26EA",lat:53.33921,lng:-6.27122,
-clue:"The largest cathedral in Ireland stands on a site where, according to legend, Ireland's patron saint baptised converts in a nearby well around 450 AD. The current Gothic building dates from the 1200s. Its most famous Dean was Jonathan Swift, satirist and author of Gulliver's Travels, who served here from 1713 until his death in 1745. He is buried in the cathedral floor, next to the woman he loved but never publicly married, known to history only as Stella.",
-ghost:"The ghost of Jonathan Swift is said to walk the nave at night, his footsteps echoing on the medieval stones. In his final years, Swift descended into madness and depression, and some claim his tortured spirit still cannot rest. More disturbing still, worshippers have reported hearing soft weeping near the tomb where he lies beside Stella. On dark winter evenings, cathedral staff have seen a woman in 18th-century mourning dress standing motionless by the tomb before vanishing into the side chapels.",
-answers:["st patricks","st patrick","saint patricks","st patricks cathedral","st patrick cathedral","patricks cathedral"],
-hint1:"Ireland's largest cathedral, on Patrick Street, stands just south of Christ Church Cathedral in the medieval quarter.",
-hint2:"Named after Ireland's patron saint. Jonathan Swift, author of Gulliver's Travels, was its Dean and is buried inside."},
-
-loc_o:{name:"Ha'penny Bridge",subtitle:"Liffey Bridge",emoji:"\u{1F309}",lat:53.34594,lng:-6.26317,
-clue:"This delicate white iron pedestrian bridge has spanned the River Liffey since 1816, making it one of Dublin's oldest surviving bridges. Its name comes from the toll originally charged to cross, a half-penny per person. Before its construction, seven ferries operated at this point on the river, run by a man named William Walsh, who was granted the right to build the bridge in exchange for surrendering his ferry business.",
-ghost:"The Liffey is a river of sorrow, and this bridge has witnessed many tragedies over two centuries. Locals speak of the Weeping Lady, a figure in Victorian dress seen standing at the middle of the bridge, gazing down at the water. When approached, she vanishes. Late at night, walkers have reported hearing splashes with no visible source, and the distinct sound of a woman calling from the dark water below. During heavy fogs, some claim to have seen figures crossing who leave no footprints in the frost.",
-answers:["hapenny bridge","ha penny bridge","halfpenny bridge","penny bridge","liffey bridge","hapenny"],
-hint1:"This white iron pedestrian bridge crosses the River Liffey, connecting the north and south sides of the city near Temple Bar.",
-hint2:"Its name refers to the half-penny toll charged when it opened in 1816. One of Dublin's most photographed landmarks."},
-
-loc_p:{name:"Merchant's Arch",subtitle:"Wellington Quay",emoji:"\u{1F3DB}\uFE0F",lat:53.34557,lng:-6.26290,
-clue:"This narrow stone archway, tucked between Temple Bar and the south side of the city's most famous pedestrian bridge, was built in 1821 as part of the old Merchant's Guildhall. It was long a place where merchants met to conduct informal business, and where couples once eloped in secret through the covered passage. Today it is one of the most photographed shortcuts in Dublin, a stone portal between the riverside and the cobblestones of the cultural quarter.",
-ghost:"They say the arch is haunted by the Runner, the ghost of a young man in 19th-century clothing seen sprinting through the passage in a state of panic before dissolving into thin air on the far side. According to legend, he was a merchant's apprentice who fled with the day's takings, was caught and beaten to death inside the arch by his pursuers, and still runs the same terrified route every night. Late-night walkers describe a sudden cold breath at their neck as they pass through.",
-answers:["merchants arch","merchant arch","the arch","merchants archway"],
-hint1:"This narrow covered stone archway connects the Temple Bar area to the south end of the Ha'penny Bridge, beside the Liffey riverside walk.",
-hint2:"Named for the merchant guild that built it in 1821. Find it right next to the Ha'penny Bridge \u2014 a small covered passageway you walk through."},
-
-loc_q:{name:"Fishamble Street",subtitle:"Old Dublin",emoji:"\u{1F525}",lat:53.34490,lng:-6.27060,
-clue:"This narrow, steeply sloping street winding down toward the River Liffey has one of the most extraordinary claims in music history: on 13 April 1742, in a music hall on this street, Handel personally conducted the world premiere of his masterpiece, Messiah. The neighbouring district, known simply as Hell in the 18th century, was a warren of taverns, brothels, and cutthroat alleys, and gave rise to Dublin's most notorious ghost story.",
-ghost:"In the 1780s, a convicted killer named Olocher hanged himself in his cell rather than face execution. The next morning, his body was mysteriously missing. Soon after, a demonic pig-like creature called the Dolocher was reported terrorising this district at night, attacking women in the darkened alleys and wearing the leathery skin of the dead prisoner. Panic swept Dublin. Even after the beast was supposedly killed by a butcher with a cleaver, sightings persisted for decades. Even today, people hurrying home late have reported hearing cloven hooves on the cobbles behind them.",
-answers:["fishamble street","fishamble","fishamble st"],
-hint1:"This historic narrow street runs steeply downhill toward the Liffey, between Christ Church Cathedral and Wood Quay.",
-hint2:"Named after the medieval fish market that once operated here. Handel conducted the world premiere of Messiah on this street in 1742."},
-
-loc_r:{name:"Iveagh Gardens",subtitle:"Clonmel Street",emoji:"\u{1F333}",lat:53.33641,lng:-6.26049,
-clue:"Known as Dublin's Secret Garden, this hidden Victorian pleasure ground was designed in 1863 by Ninian Niven for the Guinness family, whose Iveagh House still borders its northern edge. Its formal French parterres, rustic grotto, cascade waterfall, and rose gardens survive largely unchanged from the 19th century. Despite lying just steps from Dublin's busiest shopping street, most tourists walk right past its discreet iron gates.",
-ghost:"The gardens sit on land once occupied, in the 18th century, by a private lunatic asylum. When the grounds were redesigned in the Victorian era, workers reportedly uncovered human remains beneath what is now the ornamental lake. Since then, park keepers have reported hearing quiet weeping in the fern grotto and seeing figures in Victorian mourning dress standing motionless among the rose beds at twilight. On misty evenings, a woman in a long dark cloak has been seen walking the maze path, always disappearing at its centre.",
-answers:["iveagh gardens","iveagh","guinness gardens","iveagh garden","the iveagh"],
-hint1:"These hidden Victorian gardens sit just west of St. Stephen's Green, accessible via a discreet entrance on Clonmel Street or through the National Concert Hall.",
-hint2:"Nicknamed Dublin's Secret Garden and once owned by the Guinness family. Look for a rustic grotto, cascade waterfall, and formal maze."},
-
-end:{name:"Trinity College Dublin",emoji:"\u{1F4DA}",lat:53.34384,lng:-6.25460,
-clue:"Founded in 1592 by Queen Elizabeth I, this is Ireland's oldest university. Its famous Long Room library holds over 200,000 ancient books, including a masterwork of medieval illuminated art created by Celtic monks around 800 AD. Among its distinguished alumni: the author of The Importance of Being Earnest, the author of Waiting for Godot, and the young man who walked these very cobblestones before going on to write the world's most famous vampire novel.",
-ghost:"Bram Stoker walked these cobblestones before penning the most famous horror novel ever written. The ghost of Edward Ford, a lecturer who died in the 1700s, is said to haunt the oldest buildings wearing a powdered wig and academic gown. In the Long Room, night security guards have heard the unmistakable sound of pages turning when no one else is present, as if some scholarly spirit cannot rest until it finishes its reading.",
-answers:["trinity college","trinity","tcd","trinity college dublin"],
-hint1:"This world-famous university occupies a large walled campus in the heart of Dublin, with its iconic main entrance on College Green.",
-hint2:"Ireland's oldest university, home to the Book of Kells. Its initials are T-C-D."}
+/* ============================================================
+   PUZZLES — the clue (no names!), one hint, and accepted answers
+   ============================================================ */
+var PUZZLES={
+start:{
+clue:"One of Dublin's most cherished public spaces has been open to the public since 1664, though its history is far from serene. Once used for public hangings and floggings, it was redesigned in 1880 by a member of Dublin's most famous brewing dynasty. During the 1916 Easter Rising, rebels dug trenches here and exchanged fire with British soldiers on the roof of a grand hotel overlooking the grounds.",
+hint:"This 9-hectare park sits in the heart of the city centre, at the top of Dublin's most famous pedestrian shopping street, Grafton Street.",
+answers:["st stephens green","stephens green","stephen green","st stephen green","stephens green park"]},
+loc_a:{
+clue:"Built in 1720 on one of Dublin's most elegant Georgian streets, this parish church has been a centre of city life for three centuries. A bread shelf endowed in 1723 still feeds the poor of the parish today. In 1878 the author of the world's most famous vampire novel walked through its doors, not to research his book, but to get married.",
+hint:"It stands on Dawson Street, parallel to and east of Grafton Street, between St. Stephen's Green and Trinity College. Look for a striking Romanesque facade added in 1868.",
+answers:["st anns","st ann","st anns church","st ann church","anns church","st annes church","st annes"]},
+loc_b:{
+clue:"This magnificent Georgian townhouse was built in 1774 for a Viscount whose family seat is one of Ireland's most famous estates in the Wicklow Mountains. Its elaborate plasterwork and grand mahogany staircase once hosted lavish aristocratic balls. Since 1981 it has been a shopping centre, tucked away on a street running parallel to Grafton Street.",
+hint:"It's on South William Street, between Grafton Street and South Great George's Street. The family name is shared with a famous waterfall in County Wicklow.",
+answers:["powerscourt","powerscourt townhouse","powerscourt town house","powerscourt centre","powerscourt center","powerscourt shopping centre"]},
+loc_c:{
+clue:"For over 700 years this fortress complex was the seat of British rule in Ireland. Built by the Anglo-Normans in the early 1200s, it holds State Apartments, a Gothic chapel, and a medieval undercroft sitting directly on Viking foundations. In January 1922 one of Ireland's most iconic revolutionaries formally accepted the handover of power here.",
+hint:"It sits just off Dame Street, beside City Hall, with a large cobbled courtyard and a round tower from the 1200s. It is simply named after the city.",
+answers:["dublin castle","castle of dublin"]},
+loc_d:{
+clue:"Built in 1779 as a commercial trading exchange, this domed building has twelve imposing columns and a mosaic floor showing the city's coat of arms. During the 1916 Rising rebels occupied it, and the first insurgent to die in the whole rebellion was shot by a sniper while raising a flag on its roof.",
+hint:"It sits at the top of Dame Street, right in front of Dublin Castle. It has been the seat of the city's local government since 1852.",
+answers:["city hall","dublin city hall","royal exchange"]},
+loc_e:{
+clue:"This cobblestoned quarter's name has nothing to do with drinking. It was named after a 17th-century landowner and Provost of Trinity College, and the second word once meant a riverside walkway. It was nearly demolished for a bus terminal in the 1980s before an arts campaign saved it.",
+hint:"It's the cultural and nightlife quarter between Dame Street and the River Liffey. Head for Crown Alley at its heart.",
+answers:["temple bar","temple bar quarter","crown alley"]},
+loc_f:{
+clue:"It opened in 1879 as Dan Lowrey's Star of Erin Music Hall and is one of Dublin's oldest performance venues. Its ornate Victorian interior has hosted Charlie Chaplin, Laurel and Hardy, David Bowie and Radiohead. The founder died backstage in 1897, and theatre legend says he never truly left.",
+hint:"Look for a distinctive iron-and-glass canopy over the pavement on Dame Street. The venue is named after the home of the Greek gods.",
+answers:["olympia","olympia theatre","olympia theater","the olympia"]},
+loc_g:{
+clue:"Opened in 1881, this red-brick Victorian market with a glass roof is the oldest of its kind in Dublin. Gutted by fire in 1892, it was rebuilt even grander. Its stalls sell vintage clothes, records, jewellery and fortunes. During construction, workers uncovered dozens of unmarked graves beneath the foundations.",
+hint:"It runs between South Great George's Street and Drury Street, west of Grafton Street. It was originally called the South City Markets.",
+answers:["georges street arcade","george street arcade","georges arcade","george arcade","georges st arcade","george st arcade","south great georges street arcade","south city markets","south city market"]},
+loc_h:{
+clue:"She wheeled her barrow through streets broad and narrow, crying cockles and mussels, alive, alive oh. Whether she was real is still debated, though parish records from 1699 mention a woman of her name who died young. Her bronze likeness was unveiled for Dublin's millennium in 1988, and Dubliners gave her a cheeky rhyming nickname.",
+hint:"She stands on Suffolk Street near the bottom of Grafton Street, beside St. Andrew's Church. Dubliners call her the Tart with the Cart.",
+answers:["molly malone","molly malone statue","statue of molly malone","tart with the cart","molly"]},
+loc_i:{
+clue:"This curving colonnaded building was the world's first purpose-built two-chamber parliament, built between 1729 and 1739. After the Act of Union abolished the Irish Parliament in 1800, it was sold, and a financial institution has occupied it ever since. The old House of Lords chamber survives intact inside.",
+hint:"It stands on College Green, directly opposite the front gates of Trinity College. Today it belongs to one of Ireland's oldest banks.",
+answers:["bank of ireland","bank of ireland college green","irish houses of parliament","houses of parliament","parliament house","old parliament house"]},
+loc_j:{
+clue:"Founded around 1030 by the Norse king Sitric Silkenbeard, this is Dublin's oldest medieval building. The Norman knight Strongbow rebuilt it in stone in the 1170s. Its crypt, the largest in Ireland, runs the whole length of the building and holds a mummified cat and rat once found trapped in an organ pipe.",
+hint:"It stands on the hill at Christchurch Place at the west end of Lord Edward Street, linked by a covered stone bridge to the Dublinia museum.",
+answers:["christ church","christ church cathedral","christchurch","christchurch cathedral","cathedral of the holy trinity"]},
+loc_k:{
+clue:"With records reaching back to 1198, this pub claims to be Ireland's oldest. Its low ceilings and maze of rooms have served eight centuries of Dubliners. The revolutionary Robert Emmet used it to plan his failed 1803 rebellion, and he was hanged and beheaded on nearby Thomas Street.",
+hint:"It's on Lower Bridge Street, just south of the River Liffey and west of Christ Church. Its name comes from an old inn sign of a brass-coloured head.",
+answers:["brazen head","the brazen head","brazen head pub"]},
+loc_l:{
+clue:"Dating from around 1190, this is Dublin's oldest surviving medieval parish church. It is named after a 7th-century bishop of Rouen, stands beside the last remaining gate of the medieval city walls, and holds a Lucky Stone that Dubliners have touched for good fortune for centuries. Its three bells were cast in 1423.",
+hint:"It's on High Street, just west of Christ Church Cathedral, with steep steps down to the old city gate. It is named after St. Ouen of Rouen.",
+answers:["st audoens","st audoen","st audoens church","st audoen church","audoens church","st audeons","st audoens arch"]},
+loc_m:{
+clue:"Since 1824 this has been the grandest address overlooking Dublin's best-known city park. During the 1916 Easter Rising, British soldiers took it over and placed a machine gun on its roof to fire on the rebels below. In 1922 the Irish Constitution was drafted in one of its rooms, number 112.",
+hint:"This famous hotel stands on the north side of St. Stephen's Green, near the corner with Kildare Street. Its Horseshoe Bar is a favourite of politicians.",
+answers:["shelbourne","the shelbourne","shelbourne hotel","the shelbourne hotel"]},
+loc_n:{
+clue:"Built in 1701 by an archbishop, this is Ireland's oldest public library. Its dark oak bookcases still hold the wire cages where readers were locked in with rare books to stop theft. More than 25,000 volumes line its shelves, and the author of Gulliver's Travels was a regular visitor.",
+hint:"It's on St. Patrick's Close, right next to St. Patrick's Cathedral. It carries the founding archbishop's surname, Narcissus Marsh.",
+answers:["marshs library","marsh library","marshs","archbishop marshs library","archbishop marsh library"]},
+loc_o:{
+clue:"A flamboyant figure in a smoking jacket lounges on a boulder of quartz, jade and thulite at the corner of one of Dublin's finest Georgian squares, facing the house where he grew up. Sculpted in 1997, he wears the knowing smirk of the wit who wrote The Importance of Being Earnest.",
+hint:"Find the colourful reclining statue at the northwest corner of Merrion Square, east of Trinity College.",
+answers:["oscar wilde","oscar wilde statue","statue of oscar wilde","wilde","oscar wilde memorial","merrion square"]},
+end:{
+clue:"Founded in 1592 by Queen Elizabeth I, this is Ireland's oldest university. Its Long Room library holds 200,000 old books and an illuminated manuscript made by Celtic monks around 800 AD. Its alumni include the authors of The Importance of Being Earnest and Waiting for Godot, and the young man who later wrote the most famous vampire novel of all.",
+hint:"It's the large walled campus whose front gate faces College Green. It is home to the Book of Kells, and its initials are T-C-D.",
+answers:["trinity college","trinity","tcd","trinity college dublin","university of dublin"]}
 };
 
-/* 8 middle stops per team = 10 total including start and finish */
-var ROUTES = {
-  1:["loc_r","loc_n","loc_m","loc_j","loc_c","loc_g","loc_a","loc_h"],
-  2:["loc_a","loc_g","loc_f","loc_d","loc_e","loc_p","loc_o","loc_i"],
-  3:["loc_b","loc_g","loc_c","loc_q","loc_l","loc_k","loc_j","loc_h"],
-  4:["loc_a","loc_b","loc_c","loc_f","loc_e","loc_p","loc_o","loc_i"],
-  5:["loc_r","loc_n","loc_m","loc_k","loc_j","loc_c","loc_g","loc_h"],
-  6:["loc_a","loc_b","loc_g","loc_d","loc_l","loc_q","loc_j","loc_i"]
-};
+/* ============================================================
+   TEAM ROUTES (start and finish are added automatically)
+   ============================================================ */
+const TEAM_ROUTES={1:["loc_a","loc_b","loc_c","loc_e","loc_h","loc_m"],2:["loc_o","loc_h","loc_g","loc_f","loc_d","loc_i"],3:["loc_m","loc_b","loc_g","loc_c","loc_l","loc_a"],4:["loc_a","loc_f","loc_e","loc_j","loc_k","loc_i"],5:["loc_o","loc_g","loc_c","loc_j","loc_n","loc_h"],6:["loc_m","loc_h","loc_b","loc_d","loc_l","loc_i"]};
 
 /* ============================================================
    HELPERS
    ============================================================ */
-function haversine(la1,lo1,la2,lo2){
-  var R=6371000, dLa=(la2-la1)*Math.PI/180, dLo=(lo2-lo1)*Math.PI/180;
-  var sa=Math.sin(dLa/2), sb=Math.sin(dLo/2);
-  var a=sa*sa+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*sb*sb;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+function haversine(la1,lo1,la2,lo2){var R=6371000,dLa=(la2-la1)*Math.PI/180,dLo=(lo2-lo1)*Math.PI/180,sa=Math.sin(dLa/2),sb=Math.sin(dLo/2),a=sa*sa+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*sb*sb;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function canon(s){
+  return String(s).toLowerCase().replace(/[‘’'`]/g,"").replace(/&/g," and ")
+    .replace(/[^a-z0-9 ]/g," ").replace(/\bsaint\b/g,"st").replace(/\bstreet\b/g,"st")
+    .replace(/^\s*the\s+/,"").replace(/\s+/g," ").trim();
 }
-function norm(s){
-  return String(s).toLowerCase().replace(/[\u2018\u2019'`]/g,"")
-    .replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
-}
+function lev(a,b){if(a===b)return 0;var m=a.length,n=b.length,d=[],i,j;for(i=0;i<=m;i++)d[i]=[i];for(j=0;j<=n;j++)d[0][j]=j;for(i=1;i<=m;i++)for(j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n];}
+var GENERIC={church:1,cathedral:1,st:1,statue:1,library:1,hotel:1,bridge:1,theatre:1,theater:1,castle:1,bank:1,college:1,green:1,park:1,arcade:1,hall:1,pub:1,dublin:1,square:1,market:1,museum:1,house:1};
 function matches(input,id){
-  if(!input||input.trim().length<2) return false;
-  var n=norm(input), list=LOCS[id].answers;
+  var n=canon(input);
+  if(n.length<3) return false;
+  var list=PUZZLES[id].answers;
   for(var i=0;i<list.length;i++){
-    var a=norm(list[i]);
+    var a=canon(list[i]);
     if(n===a) return true;
-    if(n.indexOf(a)!==-1) return true;
-    if(a.indexOf(n)!==-1 && n.length>=5) return true;
+    if(a.length>=5 && (" "+n+" ").indexOf(" "+a+" ")!==-1) return true;          // guess contains the full answer
+    if(n.length>=5 && !GENERIC[n] && (" "+a+" ").indexOf(" "+n+" ")!==-1 && n.length>=a.length*0.5) return true; // guess is a big chunk of the answer
+    if(a.length>=6 && lev(n,a)<=(a.length>=12?2:1)) return true;                  // small typos
   }
   return false;
 }
 function pad(x){return x<10?"0"+x:""+x;}
-function fmt(sec){
-  sec=Math.max(0,Math.floor(sec));
-  var h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60;
-  return h>0 ? h+":"+pad(m)+":"+pad(s) : m+":"+pad(s);
-}
-function esc(s){
-  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
+function fmt(sec){sec=Math.max(0,Math.floor(sec));var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return h>0?h+":"+pad(m)+":"+pad(s):m+":"+pad(s);}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
 /* ============================================================
    STATE
    ============================================================ */
-var S = {
-  screen:"splash", teamNum:null, teamName:"",
-  stopIdx:0, phase:"clue", hintLevel:0, feedback:null,
-  gpsStatus:"idle", gpsMsg:"", gpsDist:null, showOverride:false,
-  startMs:null, penaltySec:0, finalSec:null, finishedAt:null,
-  log:[], resumed:false,
-  speaking:false, ttsLoading:false, ttsError:""
-};
+var S={screen:"splash",teamNum:null,teamName:"",stopIdx:0,phase:"clue",wrong:0,feedback:null,
+  gpsStatus:"idle",gpsMsg:"",gpsDist:null,gpsTries:0,startMs:null,penaltySec:0,finalSec:null,finishedAt:null,
+  log:[],resumed:false,tab:"history"};
+var ticker=null;
 
-var audioEl=null, audioCache={}, ticker=null;
-
-function route(){ return S.teamNum ? ["start"].concat(ROUTES[S.teamNum]).concat(["end"]) : []; }
-function curLoc(){ var r=route(); return r.length ? LOCS[r[S.stopIdx]] : null; }
-function curId(){ var r=route(); return r.length ? r[S.stopIdx] : null; }
-function elapsedSec(){
-  if(S.finalSec!==null) return S.finalSec;
-  if(!S.startMs) return 0;
-  return Math.floor((Date.now()-S.startMs)/1000)+S.penaltySec;
-}
-
-/* per-stop record that feeds the finish summary */
+function route(){return S.teamNum?["start"].concat(TEAM_ROUTES[S.teamNum]).concat(["end"]):[];}
+function curId(){return route()[S.stopIdx];}
+function curLoc(){return LOCATIONS[curId()];}
+function curPuz(){return PUZZLES[curId()];}
+function liveSec(){return S.startMs?Math.floor((Date.now()-S.startMs)/1000)+S.penaltySec:0;}
+function elapsedSec(){return S.finalSec!==null?S.finalSec:liveSec();}
 function rec(){
-  if(!S.log[S.stopIdx]){
-    var L=curLoc();
-    S.log[S.stopIdx]={
-      name:L?L.name:"?", wrong:0, hints:0, revealed:false,
-      penalty:0, arrivedSec:null, manual:false
-    };
-  }
+  if(!S.log[S.stopIdx]) S.log[S.stopIdx]={id:curId(),wrong:0,hinted:false,revealed:false,penalty:0,arrivedSec:null,manual:false};
   return S.log[S.stopIdx];
 }
 
-/* ============================================================
-   SAVED PROGRESS  (survives reloads, locked screens, crashes)
-   ============================================================ */
-var SAVE_KEY="shadows_of_dublin_v1";
-
-function save(){
-  try{
-    localStorage.setItem(SAVE_KEY, JSON.stringify({
-      v:1, screen:S.screen, teamNum:S.teamNum, teamName:S.teamName,
-      stopIdx:S.stopIdx, phase:S.phase, hintLevel:S.hintLevel,
-      startMs:S.startMs, penaltySec:S.penaltySec,
-      finalSec:S.finalSec, finishedAt:S.finishedAt, log:S.log
-    }));
-  }catch(e){ /* private mode or full storage — game still playable */ }
-}
-
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify({screen:S.screen,teamNum:S.teamNum,teamName:S.teamName,stopIdx:S.stopIdx,phase:S.phase,wrong:S.wrong,startMs:S.startMs,penaltySec:S.penaltySec,finalSec:S.finalSec,finishedAt:S.finishedAt,log:S.log,gpsTries:S.gpsTries}));}catch(e){}}
 function load(){
-  try{
-    var raw=localStorage.getItem(SAVE_KEY);
-    if(!raw) return false;
-    var d=JSON.parse(raw);
-    if(!d || !d.teamNum) return false;
-    S.screen     = d.screen || "hunt";
-    S.teamNum    = d.teamNum;
-    S.teamName   = d.teamName || "";
-    S.stopIdx    = d.stopIdx || 0;
-    S.phase      = d.phase || "clue";
-    S.hintLevel  = d.hintLevel || 0;
-    S.startMs    = d.startMs || null;
-    S.penaltySec = d.penaltySec || 0;
-    S.finalSec   = (typeof d.finalSec === "number") ? d.finalSec : null;
-    S.finishedAt = d.finishedAt || null;
-    S.log        = d.log || [];
-    return true;
-  }catch(e){ return false; }
+  try{var d=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");if(!d||!d.teamNum||!TEAM_ROUTES[d.teamNum])return false;
+    for(var k in d) if(d.hasOwnProperty(k)) S[k]=d[k];
+    if(S.screen!=="hunt"&&S.screen!=="complete") S.screen="hunt";
+    return true;}catch(e){return false;}
 }
-
-function wipe(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+function wipe(){try{localStorage.removeItem(SAVE_KEY);}catch(e){}}
 
 /* ============================================================
-   AUDIO  —  pre-made MP3 files, with a device-voice fallback
+   AUDIO — clue read by the phone's voice; reward stories from MP3s
    ============================================================ */
-var preloaded={};        /* "loc_a-clue" -> Audio element, or "missing" */
-
-function akey(id,kind){ return id+"-"+kind; }
-function apath(id,kind){ return AUDIO_DIR+id+"-"+kind+".mp3"; }
-function atext(id,kind){ return kind==="clue" ? LOCS[id].clue : LOCS[id].ghost; }
-
-/* Load the file into an <audio> element ahead of time so that the
-   later play() call happens inside the tap, which mobile requires. */
-function preload(id,kind){
-  var k=akey(id,kind);
-  if(preloaded[k]) return;
-  var a=new Audio();
-  a.preload="auto"; a.playsInline=true; a.setAttribute("playsinline","");
-  a.addEventListener("error",function(){ preloaded[k]="missing"; },{once:true});
-  a.src=apath(id,kind);
-  try{ a.load(); }catch(e){}
-  preloaded[k]=a;
-}
-
+var audioEl=null,audioKey=null,speaking=false;
 function stopAudio(){
-  if(audioEl){
-    try{ audioEl.pause(); audioEl.currentTime=0; }catch(e){}
-    audioEl=null;
-  }
+  if(audioEl){try{audioEl.pause();}catch(e){}audioEl=null;}
+  audioKey=null;
   if(window.speechSynthesis) window.speechSynthesis.cancel();
-  S.speaking=false; S.ttsLoading=false;
+  speaking=false;
 }
-
-/* Fallback: the phone's built-in voice.  Not as good, but it always works. */
-function deviceSpeak(text){
-  if(!window.speechSynthesis){ S.ttsNote="No narration available on this device."; render(); return; }
+function speakText(text){
+  if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  var go=function(){
-    var vs=window.speechSynthesis.getVoices();
-    var v = pickVoice(vs,"en-IE") || pickVoice(vs,"en-GB") || pickVoice(vs,"en");
-    var u=new SpeechSynthesisUtterance(text);
-    if(v) u.voice=v;
-    u.rate=0.85; u.pitch=0.8;
-    u.onstart=function(){ S.speaking=true; render(); };
-    u.onend=function(){ S.speaking=false; render(); };
-    u.onerror=function(){ S.speaking=false; render(); };
-    window.speechSynthesis.speak(u);
-  };
-  if(window.speechSynthesis.getVoices().length) go();
-  else window.speechSynthesis.addEventListener("voiceschanged",go,{once:true});
+  var vs=window.speechSynthesis.getVoices(),v=null;
+  ["en-IE","en-GB","en"].some(function(p){for(var i=0;i<vs.length;i++){if(vs[i].lang&&vs[i].lang.indexOf(p)===0){v=vs[i];return true;}}return false;});
+  var u=new SpeechSynthesisUtterance(text);if(v)u.voice=v;u.rate=.9;u.pitch=.85;
+  u.onend=u.onerror=function(){speaking=false;render();};
+  speaking=true;window.speechSynthesis.speak(u);
 }
-function pickVoice(list,prefix){
-  for(var i=0;i<list.length;i++){ if(list[i].lang && list[i].lang.indexOf(prefix)===0) return list[i]; }
-  return null;
+function toggleMp3(id,type){
+  var key=id+"_"+type;
+  if(audioEl&&audioKey===key){ if(audioEl.paused){audioEl.play().catch(function(){});} else audioEl.pause(); syncPlayer(); return; }
+  stopAudio();
+  var a=new Audio("audio/"+key+".mp3");a.setAttribute("playsinline","");
+  audioEl=a;audioKey=key;
+  a.addEventListener("timeupdate",syncPlayer);
+  a.addEventListener("play",syncPlayer);a.addEventListener("pause",syncPlayer);
+  a.addEventListener("ended",function(){audioEl=null;audioKey=null;syncPlayer();});
+  a.addEventListener("error",function(){var t=document.getElementById("ptime");if(t)t.textContent="no audio";audioEl=null;audioKey=null;syncPlayer();});
+  a.play().catch(function(){});
 }
-
-function speak(id,kind){
-  stopAudio(); S.ttsError=""; S.ttsNote="";
-  var k=akey(id,kind), a=preloaded[k];
-
-  if(a && a!=="missing"){
-    audioEl=a;
-    a.onended=function(){ S.speaking=false; audioEl=null; render(); };
-    var p=a.play();
-    if(p && p.then){
-      p.then(function(){ S.speaking=true; render(); })
-       .catch(function(){
-         audioEl=null;
-         S.ttsNote="Narration file not found \u2014 using this device\u2019s voice.";
-         deviceSpeak(atext(id,kind));
-       });
-    }else{ S.speaking=true; render(); }
-    return;
-  }
-
-  S.ttsNote="Narration file not found \u2014 using this device\u2019s voice.";
-  deviceSpeak(atext(id,kind));
-}
-
-function prefetch(){
-  var id=curId(); if(!id) return;
-  if(S.phase==="clue")  preload(id,"clue");
-  if(S.phase==="ghost") preload(id,"ghost");
+function syncPlayer(){
+  var b=document.getElementById("pbtn"),f=document.getElementById("pfill"),t=document.getElementById("ptime");
+  if(!b) return;
+  var on=audioEl&&!audioEl.paused;
+  b.textContent=on?"⏸":"▶";
+  if(audioEl&&audioEl.duration){f.style.width=(audioEl.currentTime/audioEl.duration*100)+"%";var r=audioEl.duration-audioEl.currentTime;t.textContent=Math.floor(r/60)+":"+pad(Math.floor(r%60));}
+  else if(!audioEl){f.style.width="0";}
 }
 
 /* ============================================================
    VIEWS
    ============================================================ */
-function listenBtn(){
-  var cls="listen", label="\u{1F50A} Listen";
-  if(S.ttsLoading){ cls+=" loading"; label="\u23F3 Loading\u2026"; }
-  else if(S.speaking){ cls+=" playing"; label="\u23F9 Stop"; }
-  return '<button class="'+cls+'" data-act="listen">'+label+'</button>';
-}
-
 function viewSplash(){
-  return ''+
-  '<div class="center splashbg"><div class="centerbox">'+
+  return '<div class="center splashbg"><div class="centerbox">'+
     '<div class="ghosticon">\u{1F47B}</div>'+
     '<h1 class="logo">Shadows<br><em>of</em><br>Dublin</h1>'+
-    '<div class="shamrock">\u2618 \u2618 \u2618</div>'+
+    '<div class="shamrock">☘ ☘ ☘</div>'+
     '<p class="tagline">A Haunted Walking Scavenger Hunt</p>'+
-    '<p class="route">St. Stephen\u2019s Green \u2192 Trinity College</p>'+
+    '<p class="route">Solve the clue · Find the place · Hear its ghost</p>'+
     '<button class="btn" data-act="to-setup">Begin the Hunt</button>'+
-    '<p class="fine">6 teams \u00B7 10 haunted stops<br>Read the clue \u00B7 Name the place \u00B7 Unlock the ghost story</p>'+
+    '<p class="fine">6 teams · 8 haunted stops each · about 3 hours on foot</p>'+
   '</div></div>';
 }
-
 function viewSetup(){
-  var grid="";
-  for(var n=1;n<=6;n++){
-    grid+='<button class="teambtn'+(S.teamNum===n?" on":"")+'" data-act="team" data-n="'+n+'">'+n+'</button>';
-  }
-  var ready = S.teamNum && S.teamName.trim();
-  return ''+
-  '<div class="wrap">'+
-    '<button class="backlink" data-act="to-splash">\u2190 Back</button>'+
+  var grid="";for(var n=1;n<=6;n++) grid+='<button class="teambtn'+(S.teamNum===n?" on":"")+'" data-act="team" data-n="'+n+'">'+n+'</button>';
+  var ready=S.teamNum&&S.teamName.trim();
+  return '<div class="wrap">'+
+    '<button class="backlink" data-act="to-splash">← Back</button>'+
     '<h2 class="head">Assemble Your Team</h2>'+
-    '<p class="lede">Choose your team number and give yourselves a name worthy of the spirits you\u2019re about to meet.</p>'+
-    '<label class="lbl">Team Number</label>'+
-    '<div class="teamgrid">'+grid+'</div>'+
+    '<p class="lede">Choose your team number and a name worthy of the spirits. Your destinations stay secret until you solve each clue.</p>'+
+    '<label class="lbl">Team Number</label><div class="teamgrid">'+grid+'</div>'+
     '<label class="lbl">Team Name</label>'+
     '<input class="txt" id="tname" maxlength="30" placeholder="e.g. The Banshee Chasers" value="'+esc(S.teamName)+'">'+
+    '<div class="rules"><b>How it works</b><ol>'+
+      '<li>Read the clue and work out where it points.</li>'+
+      '<li>Type your guess. A wrong guess adds <b>+'+fmt(PENALTY_WRONG_1)+'</b> and gives you a hint.</li>'+
+      '<li>A second wrong guess adds <b>+'+fmt(PENALTY_WRONG_2)+'</b> and reveals the destination.</li>'+
+      '<li>Walk there and check in by GPS within about 25 ft to unlock its ghost story.</li>'+
+      '<li>Your final time (walking + penalties) is recorded when you reach the last stop.</li>'+
+    '</ol></div>'+
     '<button class="btn mt" data-act="begin"'+(ready?"":" disabled")+'>Start the Hunt \u{1F47B}</button>'+
-    '<p class="note">Ten stops, roughly three hours on foot. Your progress saves automatically \u2014 '+
-      'you can lock your phone or reload without losing anything.</p>'+
+    '<p class="note">The clock starts when you press Start. Progress saves automatically, so you can lock your phone or reload.</p>'+
   '</div>';
 }
-
-/* ---- rolled-up stats, shared by the screen and the text export ---- */
-function tally(){
-  var o={clean:0,hints:0,reveals:0,manual:0,wrong:0,stops:0};
-  for(var i=0;i<S.log.length;i++){
-    var r=S.log[i]; if(!r) continue;
-    o.stops++;
-    if(r.wrong===0) o.clean++;
-    o.wrong+=r.wrong; o.hints+=r.hints;
-    if(r.revealed) o.reveals++;
-    if(r.manual) o.manual++;
-  }
-  return o;
+function header(){
+  var r=route(),total=r.length,done=S.log.filter(function(x){return x&&x.arrivedSec!==null;}).length;
+  return '<div class="hdr"><div><p class="tname">'+esc(S.teamName)+'</p>'+
+      '<p class="tsub">Team '+S.teamNum+' · <button class="linkbtn" data-act="reset">start over</button></p></div>'+
+    '<div style="text-align:right"><p class="tlab">'+(S.finalSec!==null?"Final time":"Time")+'</p>'+
+      '<p class="tval" id="clock" style="color:'+(S.penaltySec>0?"var(--warn)":"var(--text)")+'">'+fmt(elapsedSec())+'</p>'+
+      (S.penaltySec>0?'<p class="pen">incl. +'+fmt(S.penaltySec)+' penalties</p>':'')+'</div></div>'+
+    (S.resumed?'<div class="resumed">✓ Progress restored — picking up where you left off.</div>':'')+
+    '<div class="bar"><div style="width:'+(done/total*100)+'%"></div></div>'+
+    '<p class="barlab">'+done+' of '+total+' stops checked off</p>';
 }
-
-function stopDetail(r){
-  if(r.revealed) return "location revealed (+10:00)";
-  if(r.wrong===0) return "solved first try";
-  return r.wrong+" wrong \u00B7 "+r.hints+" hint"+(r.hints===1?"":"s")+" (+"+fmt(r.penalty)+")";
+function journeyList(){
+  var r=route(),h='<p class="seclab">Your journey</p><div class="card" style="padding:4px 16px">';
+  r.forEach(function(id,i){
+    var L=S.log[i],done=L&&L.arrivedSec!==null,cur=i===S.stopIdx&&!done,known=done||(cur&&S.phase!=="clue");
+    var nm=known?(LOCATIONS[id].emoji+" "+LOCATIONS[id].name):(cur?"Destination unknown — solve the clue":"❓ Hidden");
+    h+='<div class="jrow '+(done?"done":cur?"cur":"locked")+'"><div class="jdot">'+(done?"✓":(i+1))+'</div>'+
+       '<div class="jname" style="'+(known&&!done?"color:var(--text);font-style:normal":"")+'">'+esc(nm)+'</div>'+
+       (done?'<div class="jt">'+fmt(L.arrivedSec)+'</div>':(i>S.stopIdx?'<div class="jt" style="color:var(--muted)">\u{1F512}</div>':''))+'</div>';
+  });
+  return h+'</div>';
 }
-
-/* ---- plain-text summary for clipboard / email ---- */
-function buildSummary(){
-  var t=S.finalSec!==null?S.finalSec:elapsedSec();
-  var g=tally();
-  var when=S.finishedAt?new Date(S.finishedAt).toLocaleString():"";
-  var L=[];
-  L.push("SHADOWS OF DUBLIN \u2014 HUNT RESULTS");
-  L.push("========================================");
-  L.push("Team "+S.teamNum+": "+S.teamName);
-  if(when) L.push("Finished: "+when);
-  L.push("");
-  L.push("FINAL TIME:   "+fmt(t));
-  L.push("  Walking:    "+fmt(Math.max(0,t-S.penaltySec)));
-  L.push("  Penalties:  "+fmt(S.penaltySec));
-  L.push("");
-  L.push("STOP BY STOP");
-  L.push("----------------------------------------");
-  for(var i=0;i<S.log.length;i++){
-    var r=S.log[i]; if(!r) continue;
-    L.push((i+1)+". "+r.name);
-    L.push("    "+stopDetail(r)+
-      (r.arrivedSec!==null?"  |  arrived "+fmt(r.arrivedSec):"")+
-      (r.manual?"  |  manual check-in":""));
-  }
-  L.push("");
-  L.push("TOTALS");
-  L.push("----------------------------------------");
-  L.push("Solved first try:    "+g.clean+" of "+g.stops);
-  L.push("Wrong guesses:       "+g.wrong);
-  L.push("Hints used:          "+g.hints);
-  L.push("Locations revealed:  "+g.reveals);
-  L.push("Manual check-ins:    "+g.manual);
-  return L.join("\n");
-}
-
-function viewComplete(){
-  var t=S.finalSec!==null?S.finalSec:elapsedSec();
-  var g=tally();
-  var when=S.finishedAt?new Date(S.finishedAt).toLocaleString():"";
-
-  var rows="";
-  for(var i=0;i<S.log.length;i++){
-    var r=S.log[i]; if(!r) continue;
-    rows+='<div class="srow">'+
-            '<div class="sn">'+(i+1)+'</div>'+
-            '<div class="sp"><b>'+esc(r.name)+'</b><span>'+esc(stopDetail(r))+
-              (r.manual?" \u00B7 manual check-in":"")+'</span></div>'+
-            '<div class="st">'+(r.arrivedSec===null?"\u2014":fmt(r.arrivedSec))+'</div>'+
-          '</div>';
-  }
-
-  return ''+
-  '<div class="donebg"><div class="sumwrap">'+
-    '<div style="font-size:60px">\u{1F3C6}</div>'+
-    '<h2 class="head" style="font-size:34px;margin-bottom:2px">Hunt Complete!</h2>'+
-    '<p class="tagline" style="margin-top:0">'+esc(S.teamName)+'</p>'+
-    '<p class="route">Team '+S.teamNum+(when?' \u00B7 '+esc(when):'')+'</p>'+
-
-    '<div class="card">'+
-      '<p class="mini" style="margin-bottom:4px">Final Time</p>'+
-      '<p class="finaltime">'+fmt(t)+'</p>'+
-      '<div class="split">'+
-        '<div>Walking<b>'+fmt(Math.max(0,t-S.penaltySec))+'</b></div>'+
-        '<div>Penalties<b style="color:'+(S.penaltySec>0?'var(--warn)':'var(--text)')+'">'+fmt(S.penaltySec)+'</b></div>'+
-      '</div>'+
-    '</div>'+
-
-    '<div class="stats">'+
-      '<div class="stat"><b>'+g.clean+'/'+g.stops+'</b><span>solved first try</span></div>'+
-      '<div class="stat"><b>'+g.wrong+'</b><span>wrong guesses</span></div>'+
-      '<div class="stat"><b>'+g.hints+'</b><span>hints used</span></div>'+
-      '<div class="stat"><b>'+g.reveals+'</b><span>revealed</span></div>'+
-    '</div>'+
-
-    '<p class="seclab">Stop by stop</p>'+
-    '<div class="card" style="padding:4px 16px">'+rows+'</div>'+
-
-    '<button class="btn mt" data-act="copy">\u{1F4CB} Copy Results</button>'+
-    '<button class="btn ghostbtn" style="margin-top:8px" data-act="email">\u2709\uFE0F Email Results</button>'+
-
-    '<p class="fine">You\u2019ve walked the haunted streets of Dublin and lived to tell the tale. '+
-      'Send your results to your instructor \u2014 then rest. The spirits have earned it too.</p>'+
-    '<button class="btn ghostbtn" style="margin-top:16px;opacity:.55" data-act="reset">\u21BA Start a New Hunt</button>'+
-  '</div></div>';
-}
-
 function viewHunt(){
-  var r=route(), loc=curLoc(), total=r.length, num=S.stopIdx+1;
-  var pct=(S.stopIdx/(total-1))*100;
-  var h='';
+  var r=route(),total=r.length,num=S.stopIdx+1,loc=curLoc(),P=curPuz(),R=rec(),last=S.stopIdx===total-1;
+  var h='<div class="wrap">'+header();
 
-  h+='<div class="wrap">';
-  h+='<div class="hdr"><div>'+
-       '<p class="tname">'+esc(S.teamName)+'</p>'+
-       '<p class="tsub">Stop '+num+' of '+total+' \u00B7 '+
-         '<button class="linkbtn" data-act="reset">start over</button></p></div>'+
-     '<div style="text-align:right">'+
-       '<p class="tlab">Time</p>'+
-       '<p class="tval" id="clock" style="color:'+(S.penaltySec>0?"var(--warn)":"var(--text)")+'">'+fmt(elapsedSec())+'</p>'+
-       (S.penaltySec>0?'<p class="pen">+'+fmt(S.penaltySec)+' penalties</p>':'')+
-     '</div></div>';
-
-  if(S.resumed){
-    h+='<div class="resumed">\u2713 Progress restored \u2014 picking up where you left off.</div>';
-  }
-
-  h+='<div class="bar"><div style="width:'+pct+'%"></div></div>';
-
-  if(S.ttsError) h+='<div class="errbox">\u{1F50A} '+esc(S.ttsError)+'</div>';
-
-  /* ---- CLUE ---- */
   if(S.phase==="clue"){
-    h+='<div class="card" style="margin-bottom:14px">'+
-         '<div class="cardrow"><span class="tag" style="color:var(--goldDim)">\u{1F4DC} Clue \u2014 Stop '+num+' of '+total+'</span>'+listenBtn()+'</div>'+
-         '<p class="body">'+esc(loc.clue)+'</p></div>';
-
-    if(S.hintLevel>=1) h+='<div class="hint"><span class="tag">\u{1F4A1} Hint 1 of 2</span><p>'+esc(loc.hint1)+'</p></div>';
-    if(S.hintLevel>=2) h+='<div class="hint"><span class="tag">\u{1F4A1} Hint 2 of 2 (final)</span><p>'+esc(loc.hint2)+'</p></div>';
-    if(S.hintLevel>=3) h+='<div class="reveal"><p class="big">\u{1F4CD} '+esc(loc.name)+'</p><p class="sm">+10:00 penalty applied</p></div>';
-
+    h+='<div class="card" style="margin-bottom:14px"><div class="cardrow"><span class="tag" style="color:var(--goldDim)">\u{1F4DC} Clue — Stop '+num+' of '+total+(last?" (final stop)":"")+'</span>'+
+       '<button class="listen'+(speaking?" playing":"")+'" data-act="speak">'+(speaking?"⏹ Stop":"\u{1F50A} Read aloud")+'</button></div>'+
+       '<p class="body">'+esc(P.clue)+'</p></div>';
+    if(S.wrong>=1) h+='<div class="hint"><span class="tag">\u{1F4A1} Hint</span><p>'+esc(P.hint)+'</p></div>';
     if(S.feedback) h+='<div class="wrongbox"><p>'+esc(S.feedback.msg)+'</p><span>+'+fmt(S.feedback.penalty)+'</span></div>';
-
-    if(S.hintLevel<3){
-      h+='<div class="guessrow">'+
-           '<input class="txt" id="guess" placeholder="Where are you headed?" autocomplete="off" autocapitalize="words">'+
-           '<button class="btn" data-act="guess">Go</button></div>';
-      if(S.hintLevel===1) h+='<p class="note">1 hint used \u00B7 1 remaining \u00B7 next wrong answer costs 2 more minutes</p>';
-      if(S.hintLevel===2) h+='<p class="note">2 hints used \u00B7 next wrong answer reveals the location (+10:00)</p>';
-    }else{
-      h+='<button class="btn" data-act="proceed">Continue to '+esc(loc.name)+' \u2192</button>';
-    }
+    h+='<div class="guessrow"><input class="txt" id="guess" placeholder="Name the place…" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">'+
+       '<button class="btn solid" data-act="guess">Guess</button></div>';
+    h+='<p class="note">'+(S.wrong===0?"Wrong guess: +"+fmt(PENALTY_WRONG_1)+" and a hint.":"Last chance — a wrong guess adds +"+fmt(PENALTY_WRONG_2)+" and reveals the destination.")+'</p>';
   }
 
-  /* ---- TRAVELING ---- */
-  if(S.phase==="traveling"){
-    h+='<div class="dest">'+
-         '<div class="emoji">'+loc.emoji+'</div>'+
-         '<span class="tag" style="color:var(--goldDim)">'+(S.hintLevel>=3?"\u{1F4CD} Destination Revealed":"\u2705 Correct \u2014 head to")+'</span>'+
-         '<h3>'+esc(loc.name)+'</h3>'+
-         (loc.subtitle?'<p class="sub">'+esc(loc.subtitle)+'</p>':'')+
-       '</div>';
-    h+='<button class="btn ghostbtn mb" data-act="directions">\u{1F5FA}\uFE0F Get Walking Directions</button>';
-    h+='<div class="card">'+
-         '<p class="mini">\u{1F441} Check in when you arrive to unlock the ghost story</p>';
-    if(S.gpsStatus==="ok"){
-      h+='<button class="btn okbtn" disabled>\u2705 Location Confirmed</button>';
-    }else{
-      h+='<button class="btn" data-act="checkin"'+(S.gpsStatus==="checking"?" disabled":"")+'>'+
-         (S.gpsStatus==="checking"?"\u{1F4E1} Checking GPS\u2026":"\u{1F4CD} I\u2019m Here \u2014 Check In")+'</button>';
-    }
-    if(S.gpsStatus==="fail"){
-      h+='<p class="gpsmsg">'+esc(S.gpsMsg)+'</p>';
-      if(S.gpsDist!==null) h+='<p class="gpsdist">Measured distance: about '+S.gpsDist+' m</p>';
-    }
-    if(S.showOverride){
-      h+='<button class="btn warnbtn" style="margin-top:10px" data-act="manual">\u270B Manual Check-In (we\u2019re standing here)</button>';
-    }
+  if(S.phase==="travel"){
+    var rv=R.revealed;
+    h+='<div class="dest'+(rv?" revealed":"")+'"><div class="emoji">'+loc.emoji+'</div>'+
+       '<span class="tag" style="color:'+(rv?"var(--warn)":"var(--success)")+'">'+(rv?"\u{1F4CD} Destination revealed":"✅ Correct! Head to")+'</span>'+
+       '<h3>'+esc(loc.name)+'</h3>'+(loc.subtitle?'<p class="sub">'+esc(loc.subtitle)+'</p>':'')+
+       (R.penalty?'<p class="pennote">+'+fmt(R.penalty)+' penalty at this stop</p>':'')+'</div>';
+    h+='<button class="btn ghostbtn mb" data-act="directions">\u{1F5FA}️ Walking directions (Google Maps)</button>';
+    h+='<div class="card"><p class="mini">\u{1F441} Stand within ~25 ft of the spot and check in to unlock the ghost story</p>';
+    if(S.gpsStatus==="ok") h+='<button class="btn okbtn" disabled>✅ Location confirmed</button>';
+    else h+='<button class="btn solid" data-act="checkin"'+(S.gpsStatus==="checking"?" disabled":"")+'>'+(S.gpsStatus==="checking"?"\u{1F4E1} Checking GPS…":"\u{1F4CD} We’re here — check in")+'</button>';
+    if(S.gpsStatus==="fail"){h+='<p class="gpsmsg">'+esc(S.gpsMsg)+'</p>';if(S.gpsDist!==null)h+='<p class="gpsdist">Measured distance: about '+S.gpsDist+' m ('+Math.round(S.gpsDist*3.281)+' ft)</p>';}
+    if(S.gpsTries>=MANUAL_AFTER_TRIES&&S.gpsStatus!=="ok"&&S.gpsStatus!=="checking") h+='<button class="btn warnbtn" style="margin-top:10px" data-act="manual">✋ GPS won’t cooperate — manual check-in (flagged on results)</button>';
     h+='</div>';
   }
 
-  /* ---- GHOST ---- */
-  if(S.phase==="ghost"){
-    h+='<div class="ghostcard">'+
-         '<div class="cardrow"><span class="tag">\u{1F47B} Ghost Story \u2014 '+esc(loc.name)+'</span>'+listenBtn()+'</div>'+
-         '<p class="body">'+esc(loc.ghost)+'</p></div>';
-    h+='<button class="btn" data-act="next">'+
-       (S.stopIdx===total-1?"\u{1F3C6} Finish the Hunt":"Next Clue \u2192")+'</button>';
+  if(S.phase==="reward"){
+    var t=S.tab;
+    h+='<div class="arrived">✅ '+esc(loc.name)+' checked off'+(last?" — your clock has stopped!":"")+'</div>';
+    h+='<div class="tabrow"><button class="tabb'+(t==="history"?" on":"")+'" data-act="tab" data-t="history">\u{1F4DC} History</button>'+
+       '<button class="tabb'+(t==="ghost"?" on":"")+'" data-act="tab" data-t="ghost">\u{1F47B} Ghost Story</button></div>';
+    h+='<div class="'+(t==="ghost"?"ghostcard":"histcard")+'"><span class="tag" style="margin-bottom:10px">'+loc.emoji+' '+esc(loc.name)+'</span>'+
+       '<div class="player"><button class="pbtn" id="pbtn" data-act="play">▶</button><div class="pinfo"><div class="plab">Listen — '+(t==="ghost"?"Ghost Story":"History")+'</div>'+
+       '<div class="pprog"><div id="pfill"></div></div></div><div class="ptime" id="ptime">--:--</div></div>'+
+       '<p class="body">'+esc(t==="ghost"?loc.ghost:loc.history)+'</p></div>';
+    h+='<button class="btn solid" data-act="next">'+(last?"\u{1F3C6} Complete the Hunt":"Next Clue →")+'</button>';
   }
 
-  h+='</div>';
+  h+=journeyList()+'</div>';
   return h;
+}
+function stopDetail(r){
+  if(r.revealed) return "revealed after 2 wrong guesses (+"+fmt(r.penalty)+")";
+  if(r.wrong===1) return "solved with hint (+"+fmt(r.penalty)+")";
+  return "solved on first guess";
+}
+function viewComplete(){
+  var rows="",r=route();
+  S.log.forEach(function(L,i){ if(!L) return; var loc=LOCATIONS[L.id];
+    rows+='<div class="srow"><div class="sn">'+(i+1)+'</div><div class="sp"><b>'+loc.emoji+' '+esc(loc.name)+'</b><span>'+esc(stopDetail(L))+(L.manual?" · manual check-in":"")+'</span></div><div class="st">'+fmt(L.arrivedSec)+'</div></div>';});
+  var when=S.finishedAt?new Date(S.finishedAt).toLocaleString():"";
+  return '<div class="donebg"><div class="sumwrap">'+
+    '<div style="font-size:60px">\u{1F3C6}</div>'+
+    '<h2 class="head" style="font-size:34px;margin-bottom:2px">Hunt Complete!</h2>'+
+    '<p class="tagline" style="margin-top:0">'+esc(S.teamName)+'</p>'+
+    '<p class="route">Team '+S.teamNum+(when?" · "+esc(when):"")+'</p>'+
+    '<div class="card"><p class="mini" style="margin-bottom:4px">Total time</p><p class="finaltime">'+fmt(S.finalSec)+'</p>'+
+      '<div class="split"><div>Walking<b>'+fmt(S.finalSec-S.penaltySec)+'</b></div><div>Penalties<b style="color:'+(S.penaltySec?"var(--warn)":"var(--text)")+'">+'+fmt(S.penaltySec)+'</b></div></div></div>'+
+    '<p class="seclab">Your journey</p><div class="card" style="padding:4px 16px">'+rows+'</div>'+
+    '<button class="btn solid mt" data-act="png">\u{1F4E5} Download Journey Summary (PNG)</button>'+
+    '<p class="fine">You’ve walked the haunted streets of Dublin and lived to tell the tale. Download your summary and send it to your instructor.</p>'+
+    '<button class="btn ghostbtn" style="margin-top:16px;opacity:.55" data-act="reset">↺ Start a new hunt</button>'+
+  '</div></div>';
 }
 
 /* ============================================================
    RENDER
    ============================================================ */
 function render(){
-  var app=document.getElementById("app"), html;
-  if(S.screen==="splash")        html=viewSplash();
-  else if(S.screen==="setup")    html=viewSetup();
-  else if(S.screen==="complete") html=viewComplete();
-  else                           html=viewHunt();
-  app.innerHTML=html;
-
-  var g=document.getElementById("guess");
-  if(g) g.focus();
-
+  var html=S.screen==="splash"?viewSplash():S.screen==="setup"?viewSetup():S.screen==="complete"?viewComplete():viewHunt();
+  document.getElementById("app").innerHTML=html;
   var tn=document.getElementById("tname");
-  if(tn){
-    tn.addEventListener("input",function(){ S.teamName=this.value; syncStartBtn(); });
-  }
+  if(tn) tn.addEventListener("input",function(){S.teamName=this.value;var b=document.querySelector('[data-act="begin"]');if(b){if(S.teamNum&&S.teamName.trim())b.removeAttribute("disabled");else b.setAttribute("disabled","");}});
+  syncPlayer();
 }
-function syncStartBtn(){
-  var b=document.querySelector('[data-act="begin"]');
-  if(!b) return;
-  if(S.teamNum && S.teamName.trim()) b.removeAttribute("disabled");
-  else b.setAttribute("disabled","");
+function tick(){var c=document.getElementById("clock");if(c)c.textContent=fmt(elapsedSec());}
+function startTicker(){if(ticker)clearInterval(ticker);ticker=setInterval(tick,1000);}
+
+/* ============================================================
+   GAME ACTIONS
+   ============================================================ */
+function submitGuess(){
+  var box=document.getElementById("guess");if(!box)return;
+  var val=box.value;if(!val.trim())return;
+  S.resumed=false;var R=rec();
+  if(matches(val,curId())){S.feedback=null;S.phase="travel";stopAudio();save();render();window.scrollTo(0,0);return;}
+  R.wrong++;S.wrong++;
+  if(S.wrong===1){S.penaltySec+=PENALTY_WRONG_1;R.penalty+=PENALTY_WRONG_1;R.hinted=true;
+    S.feedback={msg:"“"+val.trim()+"” isn’t it. Here’s a hint.",penalty:PENALTY_WRONG_1};render();save();}
+  else{S.penaltySec+=PENALTY_WRONG_2;R.penalty+=PENALTY_WRONG_2;R.revealed=true;S.feedback=null;S.phase="travel";stopAudio();save();render();window.scrollTo(0,0);}
 }
-function tick(){
-  var c=document.getElementById("clock");
-  if(c) c.textContent=fmt(elapsedSec());
+function doCheckIn(){
+  var loc=curLoc();S.resumed=false;S.gpsStatus="checking";S.gpsMsg="";S.gpsDist=null;render();
+  if(!navigator.geolocation){S.gpsTries=MANUAL_AFTER_TRIES;S.gpsStatus="fail";S.gpsMsg="This device can’t provide GPS.";render();return;}
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var d=haversine(pos.coords.latitude,pos.coords.longitude,loc.lat,loc.lng),acc=pos.coords.accuracy||0;
+    S.gpsDist=Math.round(d);
+    if(d<=CHECK_IN_RADIUS_M+Math.min(acc,GPS_SLACK_MAX_M)){arrive(false);}
+    else{S.gpsTries++;S.gpsStatus="fail";S.gpsMsg="Not close enough yet — get within about 25 ft (8 m) of "+loc.name+" and try again."+(acc>20?" Your GPS signal is weak (±"+Math.round(acc)+" m); step into the open.":"");save();render();}
+  },function(err){
+    S.gpsTries++;S.gpsStatus="fail";
+    S.gpsMsg=err.code===1?"Location access was denied. Allow location for this site in your browser settings and try again.":"Couldn’t get a GPS fix. Try again in a moment.";
+    save();render();
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+}
+function arrive(manual){
+  var R=rec(),last=S.stopIdx===route().length-1;
+  R.arrivedSec=liveSec();R.manual=!!manual;
+  if(last){S.finalSec=R.arrivedSec;if(ticker){clearInterval(ticker);ticker=null;}}
+  S.gpsStatus="ok";render();save();
+  setTimeout(function(){S.phase="reward";S.tab="history";S.gpsStatus="idle";S.gpsTries=0;S.gpsDist=null;stopAudio();save();render();window.scrollTo(0,0);},700);
+}
+function nextStop(){
+  stopAudio();S.resumed=false;
+  if(S.stopIdx>=route().length-1){S.finishedAt=Date.now();S.screen="complete";save();render();window.scrollTo(0,0);return;}
+  S.stopIdx++;S.phase="clue";S.wrong=0;S.feedback=null;S.gpsStatus="idle";S.gpsMsg="";S.gpsDist=null;S.gpsTries=0;
+  rec();save();render();window.scrollTo(0,0);
 }
 
 /* ============================================================
-   GENERATOR  —  open this page with ?generate to build the MP3s
+   PNG JOURNEY SUMMARY
    ============================================================ */
-function genItems(){
-  var out=[],id;
-  for(id in LOCS){
-    if(!LOCS.hasOwnProperty(id)) continue;
-    out.push({id:id,kind:"clue", name:LOCS[id].name, text:LOCS[id].clue});
-    out.push({id:id,kind:"ghost",name:LOCS[id].name, text:LOCS[id].ghost});
-  }
-  return out;
-}
-
-function viewGenerate(){
-  var items=genItems(), chars=0;
-  for(var i=0;i<items.length;i++) chars+=items[i].text.length;
-  return ''+
-  '<div class="wrap">'+
-    '<h2 class="head">Narration Builder</h2>'+
-    '<p class="lede">Run this once to create the MP3 files. Paste an ElevenLabs API key, '+
-      'generate, then put every downloaded file into an <b>audio</b> folder beside index.html '+
-      'and commit it. After that the hunt needs no API key and no quota at all.</p>'+
-
-    '<div class="card" style="margin-bottom:16px">'+
-      '<div class="split" style="border:none;margin:0;padding:0">'+
-        '<div>Files<b>'+items.length+'</b></div>'+
-        '<div>Characters<b>'+chars.toLocaleString()+'</b></div>'+
-      '</div>'+
-      '<p class="note" style="margin-top:14px">The free ElevenLabs plan allows 10,000 characters '+
-        'per month, so this run needs a paid month (Starter is about $5 for 30,000). '+
-        'You only pay for it once \u2014 the files are yours afterwards.</p>'+
-    '</div>'+
-
-    '<label class="lbl" style="margin-top:0">ElevenLabs API Key</label>'+
-    '<input class="txt" id="genkey" type="password" placeholder="sk_..." autocomplete="off">'+
-    '<button class="btn mt" data-act="gen-run">Generate '+items.length+' files</button>'+
-    '<p class="note">Your browser will ask permission to download multiple files \u2014 allow it. '+
-      'Run this from your hosted https:// address rather than a local file.</p>'+
-
-    '<div id="genlog" style="margin-top:18px"></div>'+
-  '</div>';
-}
-
-function genLog(msg,color){
-  var box=document.getElementById("genlog");
-  if(!box) return;
-  var p=document.createElement("p");
-  p.style.cssText="font-family:var(--Fm);font-size:12px;margin:4px 0;color:"+(color||"var(--muted)");
-  p.textContent=msg;
-  box.appendChild(p);
-  p.scrollIntoView({block:"nearest"});
-}
-
-function genRun(){
-  var keyEl=document.getElementById("genkey");
-  var key=keyEl?keyEl.value.trim():"";
-  if(!key){ alert("Paste your ElevenLabs API key first."); return; }
-
-  var btn=document.querySelector('[data-act="gen-run"]');
-  if(btn){ btn.setAttribute("disabled",""); btn.textContent="Generating\u2026"; }
-
-  var items=genItems(), i=0, failed=0;
-
-  function step(){
-    if(i>=items.length){
-      genLog("", null);
-      genLog(failed
-        ? "Finished with "+failed+" failure(s). Re-run to retry those."
-        : "All done. Move the downloads into your /audio folder.",
-        failed?"var(--warn)":"var(--success)");
-      if(btn){ btn.removeAttribute("disabled"); btn.textContent="Generate again"; }
-      return;
-    }
-    var it=items[i], fname=it.id+"-"+it.kind+".mp3";
-    genLog("["+(i+1)+"/"+items.length+"] "+fname+" \u2026");
-
-    fetch("https://api.elevenlabs.io/v1/text-to-speech/"+EL_VOICE_ID,{
-      method:"POST",
-      headers:{"Accept":"audio/mpeg","Content-Type":"application/json","xi-api-key":key},
-      body:JSON.stringify({text:it.text,model_id:"eleven_multilingual_v2",
-        voice_settings:{stability:0.5,similarity_boost:0.8,style:0.3,use_speaker_boost:true}})
-    }).then(function(r){
-      if(!r.ok) return r.text().then(function(t){ throw new Error("HTTP "+r.status+" "+t.slice(0,110)); });
-      return r.blob();
-    }).then(function(blob){
-      var url=URL.createObjectURL(blob);
-      var a=document.createElement("a");
-      a.href=url; a.download=fname;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      setTimeout(function(){ URL.revokeObjectURL(url); },5000);
-      genLog("    saved "+fname,"var(--success)");
-      i++; setTimeout(step,900);
-    }).catch(function(e){
-      failed++;
-      genLog("    FAILED "+fname+" \u2014 "+e.message,"var(--danger)");
-      i++; setTimeout(step,900);
-    });
-  }
-  step();
-}
-function submitGuess(){
-  var box=document.getElementById("guess");
-  if(!box) return;
-  var val=box.value;
-  if(!val.trim()) return;
-
-  S.resumed=false;
-  var R=rec();
-
-  if(matches(val,curId())){
-    S.feedback=null; S.phase="traveling";
-    stopAudio(); render(); save(); prefetch(); return;
-  }
-
-  R.wrong++;
-  if(S.hintLevel===0){
-    S.penaltySec+=120; R.penalty+=120; R.hints=1; S.hintLevel=1;
-    S.feedback={msg:"Not quite. Here\u2019s your first hint.",penalty:120};
-  }else if(S.hintLevel===1){
-    S.penaltySec+=120; R.penalty+=120; R.hints=2; S.hintLevel=2;
-    S.feedback={msg:"Still not it. One final hint.",penalty:120};
-  }else{
-    S.penaltySec+=600; R.penalty+=600; R.revealed=true; S.hintLevel=3;
-    S.feedback={msg:"Out of hints \u2014 the location has been revealed.",penalty:600};
-  }
-  render(); save();
-}
-
-function doCheckIn(){
-  var loc=curLoc();
-  S.resumed=false;
-  S.gpsStatus="checking"; S.gpsMsg=""; S.gpsDist=null; S.showOverride=false; render();
-
-  if(!navigator.geolocation){
-    S.gpsStatus="fail"; S.gpsMsg="This device can\u2019t provide GPS."; S.showOverride=true; render(); return;
-  }
-  navigator.geolocation.getCurrentPosition(function(pos){
-    var d=haversine(pos.coords.latitude,pos.coords.longitude,loc.lat,loc.lng);
-    S.gpsDist=Math.round(d);
-    if(d<=GPS_RADIUS){ arrive(false); }
-    else{
-      S.gpsStatus="fail";
-      S.gpsMsg="You\u2019re about "+Math.round(d)+" m away. Move closer and try again.";
-      S.showOverride=true; render();
-    }
-  },function(err){
-    S.gpsStatus="fail";
-    S.gpsMsg = err.code===1
-      ? "Location access was denied. Enable it in your browser settings, or check in manually."
-      : "Couldn\u2019t get a GPS fix. Try again, or check in manually.";
-    S.showOverride=true; render();
-  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
-}
-
-function arrive(manualFlag){
-  var R=rec();
-  R.arrivedSec=elapsedSec();
-  R.manual=!!manualFlag;
-  S.gpsStatus="ok"; render(); save();
-  setTimeout(function(){
-    S.phase="ghost"; S.gpsStatus="idle"; S.showOverride=false; S.gpsDist=null;
-    stopAudio(); render(); save(); prefetch();
-  },700);
-}
-
-function nextStop(){
-  var r=route();
-  S.resumed=false;
-  if(S.stopIdx+1>=r.length){
-    S.finalSec=elapsedSec();
-    S.finishedAt=Date.now();
-    if(ticker){ clearInterval(ticker); ticker=null; }
-    stopAudio(); S.screen="complete"; render(); save(); return;
-  }
-  S.stopIdx++; S.phase="clue"; S.hintLevel=0; S.feedback=null;
-  S.gpsStatus="idle"; S.gpsMsg=""; S.gpsDist=null; S.showOverride=false; S.ttsError="";
-  rec();
-  stopAudio(); render(); save(); prefetch();
-}
-
-/* ---- clipboard, with a fallback for older mobile browsers ---- */
-function copyText(txt,onDone){
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).then(onDone).catch(function(){ legacyCopy(txt,onDone); });
-  }else{ legacyCopy(txt,onDone); }
-}
-function legacyCopy(txt,onDone){
-  try{
-    var ta=document.createElement("textarea");
-    ta.value=txt;
-    ta.style.position="fixed"; ta.style.left="-9999px";
-    document.body.appendChild(ta);
-    ta.focus(); ta.select(); ta.setSelectionRange(0,txt.length);
-    document.execCommand("copy");
-    document.body.removeChild(ta);
-    onDone();
-  }catch(e){
-    alert("Couldn\u2019t copy automatically \u2014 please screenshot this page instead.");
-  }
+function downloadPNG(){
+  var stops=S.log.filter(Boolean),W=1200,H=1010+stops.length*78,c=document.createElement("canvas");c.width=W;c.height=H;var x=c.getContext("2d");
+  var g=x.createRadialGradient(W/2,H*.25,80,W/2,H/2,H*.8);g.addColorStop(0,"#1a1a28");g.addColorStop(1,"#0a0a0f");x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.strokeStyle="#c9a84c";x.lineWidth=4;x.strokeRect(40,40,W-80,H-80);x.strokeStyle="rgba(201,168,76,0.3)";x.lineWidth=1;x.strokeRect(54,54,W-108,H-108);
+  x.textAlign="center";
+  x.font="72px serif";x.fillText("\u{1F47B}",W/2,150);
+  x.fillStyle="#c9a84c";x.font="bold 62px Georgia,serif";x.fillText("Shadows of Dublin",W/2,240);
+  x.fillStyle="#8a8677";x.font="italic 24px Georgia,serif";x.fillText("A Haunted Walking Scavenger Hunt — Journey Summary",W/2,282);
+  x.fillStyle="#e8e4d9";x.font="bold 46px Georgia,serif";x.fillText(S.teamName,W/2,370);
+  x.fillStyle="#8a8677";x.font="20px monospace";x.fillText("TEAM "+S.teamNum+"  ·  "+new Date(S.finishedAt||Date.now()).toLocaleDateString("en-IE",{year:"numeric",month:"long",day:"numeric"}),W/2,408);
+  x.fillStyle="#8a8677";x.font="20px monospace";x.fillText("TOTAL TIME",W/2,480);
+  x.fillStyle="#c9a84c";x.font="bold 92px monospace";x.fillText(fmt(S.finalSec),W/2,575);
+  x.font="22px monospace";x.fillStyle="#e8e4d9";x.fillText("Walking "+fmt(S.finalSec-S.penaltySec)+"   +   Penalties "+fmt(S.penaltySec),W/2,622);
+  var solved=stops.filter(function(r){return r.wrong===0;}).length;
+  x.fillStyle="#8a8677";x.font="18px monospace";x.fillText(solved+" of "+stops.length+" clues solved on the first guess",W/2,656);
+  x.strokeStyle="rgba(201,168,76,0.35)";x.beginPath();x.moveTo(120,700);x.lineTo(W-120,700);x.stroke();
+  x.fillStyle="#8a8677";x.font="18px monospace";x.fillText("THE JOURNEY",W/2,745);
+  var y=800;
+  stops.forEach(function(r,i){var loc=LOCATIONS[r.id];
+    x.textAlign="left";
+    x.fillStyle=r.revealed?"#c9944c":r.wrong?"#c9a84c":"#4cc96a";x.beginPath();x.arc(140,y-8,20,0,Math.PI*2);x.fill();
+    x.fillStyle="#000";x.font="bold 18px monospace";x.textAlign="center";x.fillText(String(i+1),140,y-2);
+    x.textAlign="left";x.fillStyle="#e8e4d9";x.font="26px Georgia,serif";x.fillText(loc.emoji+"  "+loc.name,185,y);
+    x.fillStyle="#8a8677";x.font="17px monospace";x.fillText(stopDetail(r)+(r.manual?" · manual check-in":""),185,y+28);
+    x.textAlign="right";x.fillStyle="#c9a84c";x.font="22px monospace";x.fillText(fmt(r.arrivedSec),W-130,y);
+    y+=78;});
+  x.textAlign="center";x.fillStyle="#8a8677";x.font="italic 18px Georgia,serif";x.fillText("The spirits thank you for visiting… and hope you’ll return.",W/2,H-80);
+  var name="shadows-of-dublin-team"+S.teamNum+"-"+S.teamName.replace(/[^a-z0-9]+/gi,"-").toLowerCase()+".png";
+  c.toBlob(function(b){var u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(u);},4000);},"image/png");
 }
 
 /* ============================================================
    EVENTS
    ============================================================ */
 document.addEventListener("click",function(ev){
-  var el=ev.target.closest ? ev.target.closest("[data-act]") : null;
-  if(!el) return;
+  var el=ev.target.closest?ev.target.closest("[data-act]"):null;if(!el)return;
   var act=el.getAttribute("data-act");
-
-  if(act==="to-setup"){ S.screen="setup"; render(); }
-
-  else if(act==="to-splash"){ S.screen="splash"; render(); }
-
-  else if(act==="team"){ S.teamNum=parseInt(el.getAttribute("data-n"),10); render(); }
-
+  if(act==="to-setup"){S.screen="setup";render();}
+  else if(act==="to-splash"){S.screen="splash";render();}
+  else if(act==="team"){S.teamNum=parseInt(el.getAttribute("data-n"),10);render();}
   else if(act==="begin"){
-    if(!S.teamNum || !S.teamName.trim()) return;
-    S.screen="hunt"; S.stopIdx=0; S.phase="clue"; S.hintLevel=0; S.feedback=null;
-    S.startMs=Date.now(); S.penaltySec=0; S.finalSec=null; S.finishedAt=null;
-    S.log=[]; S.resumed=false; audioCache={};
-    if(ticker) clearInterval(ticker);
-    ticker=setInterval(tick,1000);
-    rec();
-    render(); save(); prefetch();
+    if(!S.teamNum||!S.teamName.trim())return;
+    S.teamName=S.teamName.trim();S.screen="hunt";S.stopIdx=0;S.phase="clue";S.wrong=0;S.feedback=null;
+    S.startMs=Date.now();S.penaltySec=0;S.finalSec=null;S.finishedAt=null;S.log=[];S.resumed=false;S.gpsTries=0;
+    rec();startTicker();save();render();
   }
-
-  else if(act==="guess"){ submitGuess(); }
-
-  else if(act==="proceed"){
-    S.phase="traveling"; S.feedback=null; S.resumed=false;
-    stopAudio(); render(); save(); prefetch();
-  }
-
-  else if(act==="listen"){
-    var id=curId(); if(!id) return;
-    if(S.speaking||S.ttsLoading){ stopAudio(); render(); }
-    else{ speak(id, S.phase==="ghost" ? "ghost" : "clue"); }
-  }
-
-  else if(act==="gen-run"){ genRun(); }
-
-  else if(act==="directions"){
-    var L=curLoc();
-    window.open("https://www.google.com/maps/dir/?api=1&destination="+L.lat+","+L.lng+"&travelmode=walking","_blank");
-  }
-
-  else if(act==="checkin"){ doCheckIn(); }
-
-  else if(act==="manual"){ S.showOverride=false; arrive(true); }
-
-  else if(act==="next"){ nextStop(); }
-
-  else if(act==="copy"){
-    var original=el.innerHTML;
-    copyText(buildSummary(),function(){
-      el.innerHTML="\u2705 Copied to clipboard";
-      setTimeout(function(){ el.innerHTML=original; },2200);
-    });
-  }
-
-  else if(act==="email"){
-    var subj="Shadows of Dublin \u2014 Team "+S.teamNum+" ("+S.teamName+")";
-    window.location.href="mailto:?subject="+encodeURIComponent(subj)+
-                         "&body="+encodeURIComponent(buildSummary());
-  }
-
-  else if(act==="reset"){
-    if(window.confirm("Start over? This erases your team\u2019s progress and resets the timer.")){
-      wipe();
-      window.location.href=window.location.pathname;
-    }
-  }
+  else if(act==="guess") submitGuess();
+  else if(act==="speak"){if(speaking){stopAudio();}else speakText(curPuz().clue);render();}
+  else if(act==="directions"){var L=curLoc();window.open("https://www.google.com/maps/dir/?api=1&destination="+L.lat+","+L.lng+"&travelmode=walking","_blank");}
+  else if(act==="checkin") doCheckIn();
+  else if(act==="manual") arrive(true);
+  else if(act==="tab"){S.tab=el.getAttribute("data-t");stopAudio();render();}
+  else if(act==="play") toggleMp3(curId(),S.tab);
+  else if(act==="next") nextStop();
+  else if(act==="png") downloadPNG();
+  else if(act==="reset"){if(window.confirm("Start over? This erases your team’s progress and resets the clock.")){wipe();stopAudio();window.location.href=window.location.pathname;}}
 });
-
-document.addEventListener("keydown",function(ev){
-  if(ev.key==="Enter" && ev.target && ev.target.id==="guess"){
-    ev.preventDefault(); submitGuess();
-  }
-});
-
-/* surface the "using device voice" notice through the existing banner */
-var baseRender=render;
-render=function(){
-  if(S.ttsNote && !S.ttsError) S.ttsError=S.ttsNote;
-  baseRender();
-};
+document.addEventListener("keydown",function(ev){if(ev.key==="Enter"&&ev.target&&ev.target.id==="guess"){ev.preventDefault();submitGuess();}});
 
 /* ============================================================
    BOOT
    ============================================================ */
-function boot(){
-  /* ?generate  -> one-time narration builder, no saved state touched */
-  if(window.location.search.indexOf("generate")!==-1){
-    document.getElementById("app").innerHTML=viewGenerate();
-    return;
-  }
-  if(window.location.search.indexOf("reset")!==-1){ wipe(); }
-
-  var restored=load();
-  if(restored){
-    S.resumed=true;
-    if(S.screen==="hunt" && S.finalSec===null){
-      if(ticker) clearInterval(ticker);
-      ticker=setInterval(tick,1000);
-    }
-  }
-  render();
-  if(restored && S.screen==="hunt") prefetch();
-}
-
-boot();
-
+if(window.location.search.indexOf("reset")!==-1) wipe();
+if(load()){S.resumed=true;if(S.screen==="hunt"&&S.finalSec===null)startTicker();}
+render();
+window.__SOD={S:S,matches:matches,route:route};
 })();
 </script>
 </body>
